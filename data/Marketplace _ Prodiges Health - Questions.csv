@@ -1,0 +1,47 @@
+ ,Data Type,Inclusion Criteria,Exclusion Criteria,Marketplace Route,Fallback 
+What is your year of birth? ,Integer,"Age ≥ 65  
+Medicare/MA plan review eligible","Age < 65 
+Not Medicare eligible",Insurance Marketplace / Medicare routing,General savings + wellness 
+What is your sex at birth? ,Single choice (M/F) ,"F = Cervical/Breast screening reminders 
+M = prostate screening ",None (all users qualify) ,Preventative care marketplace + reminders,Wellness 
+What is your height & weight? ,Numeric ,"BMI ≥ 30
+Weight management, nutrition programs","BMI < 30 
+Not obesity program eligible","Wellness marketplace (nutrition, weight mgmt)",Wellness  
+Would you like to connect Apple Health/Google Fit? ,Yes/No,"Yes 
+Continuous vital sync (BP, glucose, steps, etc.) ","No 
+Self-reported data only","RPM, Wellness, Telehealth marketplace (dynamic) ",Manual intake + limited guidance 
+"Do you have any of these conditions? (Diabetes, Hypertension, COPD, CKD, CHF)",Multi-select,"Yes
+RPM + Telehealth eligible ","No 
+excluded from clinical programs","Clinical Marketplace (RPM, Telehealth)",Wellness & prevention marketplace 
+"What are your health goals? (Manage my diseases, Track meds, Track steps, Track weight, Hydration, Care for relative)",Multi-select,"‘Manage my diseases’ = Clinical programs
+ ‘Track meds’ = MTM
+‘Track weight/steps/hydration’ = Wellness 
+‘Care for relative’ = Caregiver marketplace",No goals selected ,Personalized marketplace routes (stacked) ,Default wellness + engagement content 
+Do you consent to data use and sharing? ,Yes/No,"Yes 
+Unlock full personalized navigation","No 
+Limited experience only ",All applicable marketplace programs,Generic educational + savings only 
+"Do you have a chronic condition requiring monitoring (Diabetes, Hypertension, COPD, CHF)?",Multi-select,Yes +  Willing to use connected device + covered by insurance = RPM eligible ,No condition OR not willing to use device OR no reimbursement pathway,Remote Patient Monitoring Marketplace,Wellness + prevention content 
+"Do you need non-emergency medical care (sick visit, medication refill, follow-up)?",Yes/No + State of residence,Yes + Lives in provider-licensed state + Has video-enabled device = Telehealth eligible,Emergency/urgent care needs OR outside licensed state OR no device,Telehealth / Virtual Primary Care marketplace,Redirect to urgent care / ER education (local urgent care would be nice) 
+Are you a US resident with valid SSN or eligible immigration status?,Yes/No,Yes + Within Open Enrollment or Special Enrollment = Insurance enrollment eligible,No legal status OR missed enrollment window,"Insurance Marketplace (ACA, MA, Medicaid)",Savings + community resources only
+Do you take 5+ chronic medications OR struggle with adherence?,Yes/No,"Yes
+ Eligible for MTM and pharmacy counseling programs",No or takes <5 meds with good adherence,"Pharmacy / MTM marketplace (adherence, refills, savings) ",General pharmacy discount + education 
+"Are you interested in mental health support (stress, anxiety, depression, sleep)?",Yes/No,"Yes
+Behavioral health navigation (teletherapy, CBT apps, meditation)","No
+Skip category",Behavioral Health marketplace,Wellness
+"In the last 7 days, have you missed any doses of your medications? ",Yes/No,"Yes
+Adherence Path",,,
+Do you ever skip or delay medications because of cost? ,Yes/No,"Yes 
+Rx Savings Path",,,
+"Would you like health challenges with friends/family, or solo goals? ",Yes/No,"Yes
+Social gamification path ",,,
+"Do you use a wearable (Apple Watch, Fitbit, Ora Ring, etc.)?",Yes/No,"Yes 
+Device Integrations ",,,
+Have you been hopitalized in the last 12 months? ,Yes/No,"Yes 
+RPM / Telehealth Transistions of Care ",,,
+Do you measure your blood pressure or blood sugar at home? ,,,,,
+Do you take more than 5 medications daily? ,,,,,
+Have you had a recent annual wellness visit or check-up? ,,,,,
+"Do you use a preferred pharmacy (CVS, Walgreens, Walmart, Mail-order)? ",,,,,
+"Do you sometimes split pills, ration doses, or use leftover meds? ",,,,,
+Would you like help setting up automatic refills or reminders? ,,,,,
+"Do you prefer daily text reminders, app notifications, or voice calls? ",,,,,

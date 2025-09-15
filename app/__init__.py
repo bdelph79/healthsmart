@@ -1,0 +1,1 @@
+# HealthSmart ADK App Package

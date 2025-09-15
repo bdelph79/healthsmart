@@ -1,0 +1,7 @@
+google-adk
+google-cloud-aiplatform
+google-genai
+google-generativeai
+pandas
+asyncio
+python-dotenv

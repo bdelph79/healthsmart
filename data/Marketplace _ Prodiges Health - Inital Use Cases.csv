@@ -1,0 +1,27 @@
+Program,Inclusion Criteria,Exclusion Criteria,Marketplace Route,Fallback
+Remote Patient Monitoring (RPM),"Chronic condition (HTN, diabetes, COPD, CHF, CKD, asthma)",No chronic condition diagnosis,Eligible for RPM enrollment (device + payer support),"Wellness education, preventive care, step tracking, pharmacy savings"
+Remote Patient Monitoring (RPM),Recent hospital discharge with high readmission risk,No recent hospitalization,Eligible for RPM enrollment (care transition focus),Wellness care + follow-up scheduling
+Remote Patient Monitoring (RPM),Can be provided a connected device + reliable connectivity,No & no connectivity,"RPM device pathway (BP cuff, glucometer, pulse ox, scale)",Manual tracking + wellness programs
+Remote Patient Monitoring (RPM),Covered by payer/provider that reimburses RPM,No coverage & unwilling to pay out-of-pocket,RPM with payer reimbursement,Pharmacy savings + low-cost preventive programs
+Remote Patient Monitoring (RPM),Provides consent for monitoring/data sharing,Declines consent,Activate RPM enrollment,General health education
+Telehealth / Virtual Primary Care,Lives in provider-licensed state,Resides outside provider coverage,Eligible for telehealth visit,Route to in-person care locator
+Telehealth / Virtual Primary Care,"Non-emergency care need (sick visit, follow-up, med refill, BH)",Emergency/urgent symptoms,Telehealth care path,Urgent care / ER routing
+Telehealth / Virtual Primary Care,Has device with video/audio capability,No video/audio device,Telehealth pathway,Phone triage or in-person care locator
+Telehealth / Virtual Primary Care,Consents to telehealth treatment,Declines consent,Telehealth visit scheduling,Default to in-person referral
+Telehealth / Virtual Primary Care,Insurance covers telehealth OR user accepts cash pay,Insurance denies and user declines cash pay,Proceed with telehealth,Pharmacy savings + education
+Insurance Enrollment,US resident with valid SSN or eligible immigration status,"Not legally eligible (undocumented, incarcerated)",Insurance marketplace eligibility,Community resources + pharmacy savings
+Insurance Enrollment,Within open enrollment OR qualifies for SEP,Missed open enrollment & no SEP,Insurance enrollment path,Savings + community health resources
+Insurance Enrollment,Not currently enrolled in MEC OR employer coverage unaffordable (>8.39% income),Has affordable MEC,Insurance subsidy/marketplace eligible,Wellness + pharmacy programs
+Insurance Enrollment,"Provides required documentation (income, residency, SSN)",Refuses documentation,Complete insurance enrollment,Savings + wellness fallback
+Insurance Enrollment,State residency confirmed,Out-of-state/non-resident,Eligible for local plan enrollment,Education + general savings
+,,,,
+,,,,
+"The goal is to ensure that every user, regardless of eligibility for clinical programs, receives a personalized and engaging experience. The system uses a structured rules matrix that combines demographics, medical conditions, goals, and social determinants of health (SDOH) to route individuals into the most relevant programs.",,,,
+,,,,
+Examples: ,,,,
+"(RPM): A 59-year-old man recently discharged from the hospital after a heart failure exacerbation. He has hypertension and diabetes, consents to data sharing, and agrees to use a connected weight scale and BP cuff.","He is routed into RPM enrollment with daily monitoring, paired with telehealth follow-up and care transition support to reduce readmission risk.",,,
+"(RPM): A 34-year-old woman with uncontrolled Type 2 diabetes, who owns a smartphone and consents to use a glucometer but lives in a rural area with limited connectivity.",She is routed to self-reported RPM lite (manual entry) plus wellness and nutrition content until connectivity barriers can be addressed.,,,
+"(Telehealth):  A 27-year-old college student living in Colorado, experiencing recurring asthma symptoms and needing a prescription refill. He has a phone with video capability and lives within a covered state.",He is routed to telehealth primary care for prescription renewal and asthma management.,,,
+"(Telehealth): A 48-year-old woman presents with chest tightness and dizziness. She requests a telehealth visit, but her symptoms are flagged as emergency red-flags.","She is excluded from telehealth and routed to urgent care / ER education, with a safety message instructing her to seek immediate care.",,,
+"(Insurance Enrollment): A 63-year-old man recently retired, who lost employer coverage and reports household income at 200% of the federal poverty level. He qualifies for a Special Enrollment Period.",He is routed into ACA marketplace enrollment with subsidy eligibility and offered a financial aid navigator.,,,
+(Insurance Enrollment): A 44-year-old woman with employer-sponsored coverage that costs less than 8% of household income (meeting affordability standards). She asks about ACA options.,"She is excluded from ACA enrollment but routed into pharmacy savings tools, preventive care, and wellness programs to reduce out-of-pocket costs.",,,
