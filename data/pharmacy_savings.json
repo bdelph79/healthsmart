@@ -1,0 +1,183 @@
+
+{
+    "rule_id": "pharmacy_savings_v1_1",
+    "service": "Pharmacy Savings Programs",
+    "version": "1.1.0",
+    "effective_date": "2025-01-01",
+    "description": "Prescription medication savings and assistance programs",
+    
+    "eligibility": {
+      "universal_access": {
+        "description": "Basic pharmacy savings available to everyone",
+        "no_insurance_required": true,
+        "no_income_restrictions": true
+      },
+      "enhanced_savings": {
+        "income_based": {
+          "required": false,
+          "household_income_max": 400,
+          "question": "What is your approximate annual household income?"
+        },
+        "insurance_status": {
+          "uninsured": {
+            "discount": "up to 80%",
+            "description": "Maximum savings for uninsured patients"
+          },
+          "underinsured": {
+            "discount": "up to 50%", 
+            "description": "Additional savings for high-deductible plans"
+          },
+          "medicare_gap": {
+            "discount": "varies",
+            "description": "Coverage during Medicare Part D gap period"
+          }
+        }
+      }
+    },
+    
+    "medication_categories": {
+      "generic_medications": {
+        "coverage": "most generic medications included",
+        "savings": "30-80% off retail price",
+        "formulary": "extensive generic formulary"
+      },
+      "brand_medications": {
+        "coverage": "selected brand medications",
+        "savings": "10-50% off retail price", 
+        "manufacturer_programs": "connection to manufacturer assistance"
+      },
+      "chronic_disease_medications": {
+        "diabetes": {
+          "medications": ["metformin", "insulin", "glucometers", "test strips"],
+          "special_programs": "diabetes care packages"
+        },
+        "hypertension": {
+          "medications": ["ACE inhibitors", "beta blockers", "diuretics"],
+          "monitoring": "blood pressure cuff discounts"
+        },
+        "mental_health": {
+          "medications": ["antidepressants", "anxiety medications"],
+          "counseling": "connection to mental health resources"
+        },
+        "asthma_copd": {
+          "medications": ["inhalers", "nebulizer medications"],
+          "devices": "spacer and nebulizer discounts"
+        }
+      }
+    },
+    
+    "program_types": {
+      "discount_card": {
+        "cost": "free",
+        "savings": "10-80% depending on medication",
+        "accepted_at": "60,000+ pharmacies nationwide",
+        "restrictions": "cannot combine with insurance"
+      },
+      "manufacturer_assistance": {
+        "brand_medications": "copay assistance for brand drugs",
+        "patient_assistance": "free medications for qualifying patients",
+        "income_requirements": "varies by manufacturer"
+      },
+      "pharmacy_generic_programs": {
+        "walmart": "$4 generics",
+        "costco": "member pricing",
+        "kroger": "generic savings program",
+        "cvs": "health savings pass"
+      },
+      "mail_order_savings": {
+        "90_day_supply": "additional savings for 90-day fills",
+        "automatic_refills": "convenience and adherence support",
+        "free_shipping": "direct to home delivery"
+      }
+    },
+    
+    "special_populations": {
+      "seniors": {
+        "medicare_part_d_gap": "donut hole coverage assistance",
+        "fixed_income": "additional assistance programs",
+        "medication_management": "adherence support services"
+      },
+      "children": {
+        "pediatric_medications": "specialized children's formulations",
+        "vaccines": "childhood immunization programs",
+        "chronic_conditions": "pediatric chronic disease support"
+      },
+      "pregnant_women": {
+        "prenatal_vitamins": "free or discounted vitamins",
+        "pregnancy_medications": "safe medication guidance",
+        "postpartum": "contraception and health support"
+      }
+    },
+    
+    "additional_services": {
+      "medication_therapy_management": {
+        "included": "review of all medications",
+        "pharmacist_consultation": "identify drug interactions",
+        "cost_optimization": "find lowest cost alternatives"
+      },
+      "adherence_support": {
+        "pill_organizers": "discounted organization tools",
+        "reminder_systems": "text and app reminders",
+        "refill_synchronization": "coordinate multiple medications"
+      },
+      "health_screenings": {
+        "blood_pressure": "free screenings at participating pharmacies",
+        "diabetes": "A1C testing and glucose monitoring",
+        "cholesterol": "lipid panel screenings"
+      }
+    },
+    
+    "pharmacy_network": {
+      "major_chains": [
+        "CVS", "Walgreens", "Rite Aid", "Walmart", "Costco", "Sam's Club"
+      ],
+      "independent_pharmacies": "most independent pharmacies participate",
+      "online_pharmacies": "verified online pharmacy options",
+      "specialty_pharmacies": "for complex medications"
+    },
+    
+    "enrollment_process": {
+      "immediate_access": "download card or app immediately",
+      "no_paperwork": "no enrollment forms required",
+      "family_coverage": "covers entire household",
+      "pet_medications": "also covers pet prescriptions"
+    },
+    
+    "technology_features": {
+      "mobile_app": {
+        "price_comparison": "compare prices across pharmacies",
+        "prescription_history": "track all medications",
+        "refill_reminders": "automated reminder system",
+        "pharmacy_locator": "find participating pharmacies"
+      },
+      "website_tools": {
+        "medication_lookup": "check if medication is covered",
+        "savings_calculator": "estimate potential savings",
+        "drug_interaction_checker": "safety screening tool"
+      }
+    },
+    
+    "limitations": {
+      "insurance_combination": "cannot be used with insurance",
+      "controlled_substances": "some restrictions on controlled medications",
+      "compound_medications": "custom compounds may not be covered",
+      "vaccinations": "vaccines typically not included"
+    },
+    
+    "success_metrics": {
+      "average_savings": "65% off retail prescription prices",
+      "member_satisfaction": "4.8/5 star rating",
+      "pharmacy_acceptance": "99% acceptance rate at participating pharmacies"
+    },
+    
+    "fallback_options": [
+      "GoodRx and similar apps",
+      "Pharmacy generic programs",
+      "State pharmaceutical assistance programs", 
+      "Manufacturer patient assistance programs",
+      "Community health center pharmacies",
+      "Hospital charity care medication programs",
+      "Religious organization assistance",
+      "Local medication assistance foundations"
+    ]
+  }

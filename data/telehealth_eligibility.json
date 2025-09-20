@@ -1,4 +1,4 @@
-// rules/telehealth_eligibility.json
+
 {
     "rule_id": "telehealth_virtual_care_v1_5",
     "service": "Telehealth / Virtual Primary Care",

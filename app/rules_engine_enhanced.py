@@ -1,10 +1,11 @@
-# CSV Rules Engine Integration - Enhanced Version
-# This module loads your CSV files and creates intelligent routing logic
+# JSON Rules Engine Integration - Enhanced Version
+# This module loads your JSON rule files and creates intelligent routing logic
 
-import pandas as pd
 import json
-from typing import Dict, List, Tuple, Optional
+import os
+from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
+from pathlib import Path
 import re
 
 @dataclass
@@ -15,159 +16,162 @@ class EligibilityResult:
     reasoning: str
     next_questions: List[str]
     fallback_options: List[str]
+    missing_criteria: List[str] = None
+    decision_trail: List[Dict[str, Any]] = None
 
-class DynamicRulesEngine:
+class JSONRulesEngine:
     """
-    Loads CSV rules and creates intelligent routing logic.
-    Minimizes hard-coding by using LLM to interpret criteria.
+    Enhanced rules engine that loads JSON rule files instead of CSV.
+    Provides more sophisticated rule evaluation and question generation.
     """
     
-    def __init__(self, csv_paths: Dict[str, str]):
-        self.csv_paths = csv_paths
-        self.initial_use_cases = None
-        self.questions_db = None
-        self.rpm_specific = None
+    def __init__(self, rules_dir: str = "rules"):
+        self.rules_dir = Path(rules_dir)
+        self.rules = {}
+        self.assessment_questions = {}
         self.load_all_rules()
     
     def load_all_rules(self):
-        """Load all CSV files into memory for fast access."""
+        """Load all JSON rule files into memory for fast access."""
         try:
-            self.initial_use_cases = pd.read_csv(self.csv_paths['initial_use_cases'])
-            self.questions_db = pd.read_csv(self.csv_paths['questions'])  
-            self.rpm_specific = pd.read_csv(self.csv_paths['rpm_specific'])
-            print("✅ All CSV rules loaded successfully")
-        except Exception as e:
-            print(f"❌ Error loading CSV files: {e}")
-    
-    def get_service_rules(self, service_name: str) -> List[Dict]:
-        """Get all rules for a specific service."""
-        if self.initial_use_cases is None:
-            return []
-        
-        service_rules = self.initial_use_cases[
-            self.initial_use_cases['Program'].str.contains(service_name, case=False, na=False)
-        ]
-        
-        return service_rules.to_dict('records')
-    
-    def generate_assessment_questions(self) -> List[Dict]:
-        """Generate questions to ask patients based on CSV question database."""
-        if self.questions_db is None:
-            return []
-        
-        questions = []
-        for _, row in self.questions_db.iterrows():
-            question_text = row.iloc[0]  # First column has questions
-            data_type = row.get('Data Type', 'text')
+            # Load specific rule files
+            rule_files = {
+                "rpm": "rpm_eligibility.json",
+                "telehealth": "telehealth_eligibility.json", 
+                "insurance": "insurance_enrollment.json",
+                "emergency": "emergency_screening.json",
+                "pharmacy": "pharmacy_savings.json",
+                "wellness": "wellness_programs.json",
+                "assessment": "assessment_questions.json"
+            }
             
-            if pd.notna(question_text) and question_text.strip():
-                questions.append({
-                    'question': question_text.strip(),
-                    'data_type': data_type,
-                    'inclusion_criteria': row.get('Inclusion Criteria', ''),
-                    'exclusion_criteria': row.get('Exclusion Criteria', ''),
-                    'marketplace_route': row.get('Marketplace Route', ''),
-                    'fallback': row.get('Fallback', row.get('Fallback ', ''))
-                })
-        
-        return questions
+            for service, filename in rule_files.items():
+                file_path = self.rules_dir / filename
+                if file_path.exists():
+                    with open(file_path, 'r') as f:
+                        rule_data = json.load(f)
+                        self.rules[service] = rule_data
+                        print(f"✅ Loaded {service} rules from {filename}")
+                else:
+                    print(f"⚠️ Warning: {filename} not found, using fallback logic")
+            
+            # Load assessment questions if available
+            if "assessment" in self.rules:
+                self.assessment_questions = self.rules["assessment"]
+                
+            print("✅ All JSON rules loaded successfully")
+            
+        except Exception as e:
+            print(f"❌ Error loading JSON rule files: {e}")
+            # Fallback to basic rules if JSON files not available
+            self._load_fallback_rules()
+    
+    def _load_fallback_rules(self):
+        """Fallback rules if JSON files are not available."""
+        self.rules = {
+            "rpm": {
+                "requirements": {
+                    "chronic_conditions": {"required": True, "question": "Do you have any chronic health conditions?"},
+                    "insurance_coverage": {"required": True, "question": "Do you have health insurance?"},
+                    "device_access": {"required": True, "question": "Do you have a smartphone or tablet?"},
+                    "consent_monitoring": {"required": True, "question": "Are you comfortable sharing health data?"}
+                },
+                "fallback_options": ["Wellness education", "Preventive care", "Pharmacy savings"]
+            }
+        }
     
     def evaluate_patient_against_rules(self, patient_responses: Dict, service: str) -> EligibilityResult:
         """
-        Evaluate if patient qualifies for a service using CSV rules.
-        Returns structured eligibility result.
+        Enhanced evaluation using JSON rules instead of CSV.
         """
-        service_rules = self.get_service_rules(service)
+        # Normalize service name
+        service_key = self._normalize_service_name(service)
         
-        if not service_rules:
+        if service_key not in self.rules:
             return EligibilityResult(
                 service=service,
                 qualified=False,
                 confidence=0.0,
                 reasoning=f"No rules found for service: {service}",
                 next_questions=[],
-                fallback_options=[]
+                fallback_options=[],
+                missing_criteria=["service_definition"]
             )
         
-        # Special handling for RPM service with improved logic
-        if "Remote Patient Monitoring" in service or "RPM" in service:
-            return self._evaluate_rpm_eligibility_enhanced(patient_responses, service_rules)
+        rule = self.rules[service_key]
         
-        # Default evaluation for other services
-        return self._evaluate_generic_eligibility(patient_responses, service, service_rules)
+        # Special handling for each service type
+        if service_key == "rpm":
+            return self._evaluate_rpm_eligibility_json(patient_responses, rule)
+        elif service_key == "telehealth":
+            return self._evaluate_telehealth_eligibility_json(patient_responses, rule)
+        elif service_key == "insurance":
+            return self._evaluate_insurance_eligibility_json(patient_responses, rule)
+        elif service_key == "emergency":
+            return self._evaluate_emergency_screening_json(patient_responses, rule)
+        else:
+            return self._evaluate_generic_eligibility_json(patient_responses, service, rule)
     
-    def _evaluate_rpm_eligibility_enhanced(self, patient_responses: Dict, service_rules: List[Dict]) -> EligibilityResult:
-        """Enhanced RPM eligibility evaluation with improved logic."""
+    def _normalize_service_name(self, service: str) -> str:
+        """Normalize service names to match JSON file keys."""
+        service_lower = service.lower()
+        if "remote patient monitoring" in service_lower or "rpm" in service_lower:
+            return "rpm"
+        elif "telehealth" in service_lower or "virtual" in service_lower:
+            return "telehealth"
+        elif "insurance" in service_lower:
+            return "insurance"
+        elif "emergency" in service_lower:
+            return "emergency"
+        elif "pharmacy" in service_lower:
+            return "pharmacy"
+        elif "wellness" in service_lower:
+            return "wellness"
+        else:
+            return "rpm"  # Default fallback
+    
+    def _evaluate_rpm_eligibility_json(self, patient_responses: Dict, rule: Dict) -> EligibilityResult:
+        """Enhanced RPM eligibility evaluation using JSON rules."""
         
-        # Extract key information from patient responses
-        age = patient_responses.get('age', 0)
-        chronic_conditions = str(patient_responses.get('chronic_conditions', '')).lower()
-        has_insurance = patient_responses.get('has_insurance', False)
-        recent_hospital = patient_responses.get('recent_hospitalization', False)
-        device_access = patient_responses.get('device_access', False)
-        consent = patient_responses.get('consent', False)
+        requirements = rule.get("requirements", {})
+        decision_trail = []
+        missing_criteria = []
+        met_requirements = []
         
-        # Check for chronic conditions
-        has_chronic_condition = any(
-            condition in chronic_conditions
-            for condition in ['diabetes', 'hypertension', 'high blood pressure', 'copd', 'heart', 'asthma', 'kidney']
-        )
+        # Check each requirement
+        for req_name, req_config in requirements.items():
+            if req_config.get("required", False):
+                is_met = self._check_requirement(patient_responses, req_name, req_config, decision_trail)
+                
+                if is_met:
+                    met_requirements.append(req_name)
+                else:
+                    missing_criteria.append(req_name)
         
-        # Calculate inclusion score (what they HAVE)
-        inclusion_score = 0
-        inclusion_reasons = []
+        # Check exclusion criteria if present
+        exclusions = rule.get("exclusion_criteria", {})
+        excluded = self._check_exclusions(patient_responses, exclusions, decision_trail)
         
-        if has_chronic_condition:
-            inclusion_score += 1
-            inclusion_reasons.append("✅ Has chronic condition")
+        # Calculate qualification
+        total_requirements = len([r for r in requirements.values() if r.get("required", False)])
+        met_count = len(met_requirements)
         
-        if has_insurance:
-            inclusion_score += 1
-            inclusion_reasons.append("✅ Has insurance coverage")
-        
-        if recent_hospital:
-            inclusion_score += 1
-            inclusion_reasons.append("✅ Recent hospitalization (helps with eligibility)")
-        
-        if device_access:
-            inclusion_score += 1
-            inclusion_reasons.append("✅ Has device access")
-        
-        if consent:
-            inclusion_score += 1
-            inclusion_reasons.append("✅ Consents to data sharing")
-        
-        # Check for explicit exclusions (what DISQUALIFIES them)
-        exclusion_factors = 0
-        exclusion_reasons = []
-        
-        if not has_chronic_condition:
-            exclusion_factors += 1
-            exclusion_reasons.append("❌ No chronic condition")
-        
-        if not has_insurance:
-            exclusion_factors += 1
-            exclusion_reasons.append("❌ No insurance coverage")
-        
-        # Determine qualification - require ALL criteria for RPM
-        # Qualify only if they have chronic condition + insurance + device access + consent
-        qualified = has_chronic_condition and has_insurance and device_access and consent
-        
-        # Calculate confidence (0-1 scale)
-        max_possible = 5  # chronic + insurance + hospital + device + consent
-        confidence = inclusion_score / max_possible
+        qualified = (met_count == total_requirements) and not excluded
+        confidence = met_count / total_requirements if total_requirements > 0 else 0.0
         
         # Generate reasoning
-        if inclusion_reasons:
-            reasoning = " | ".join(inclusion_reasons)
+        if excluded:
+            reasoning = "❌ Excluded due to emergency symptoms or other exclusion criteria"
+        elif missing_criteria:
+            reasoning = f"Missing {len(missing_criteria)} required criteria: {', '.join(missing_criteria)}"
         else:
-            reasoning = "❓ Need more information to assess eligibility"
+            reasoning = f"✅ Meets all {total_requirements} requirements for RPM"
         
-        # Generate next questions based on what's missing
-        next_questions = self._generate_rpm_questions_enhanced(patient_responses, inclusion_score)
+        # Get next questions
+        next_questions = self._generate_next_questions_json(patient_responses, requirements, missing_criteria)
         
         # Get fallback options
-        fallback_options = ["Wellness education", "Preventive care", "Pharmacy savings", "Manual tracking"]
+        fallback_options = rule.get("fallback_options", [])
         
         return EligibilityResult(
             service="Remote Patient Monitoring (RPM)",
@@ -175,368 +179,461 @@ class DynamicRulesEngine:
             confidence=confidence,
             reasoning=reasoning,
             next_questions=next_questions,
-            fallback_options=fallback_options
+            fallback_options=fallback_options,
+            missing_criteria=missing_criteria,
+            decision_trail=decision_trail
         )
     
-    def _generate_rpm_questions_enhanced(self, patient_responses: Dict, inclusion_score: int) -> List[str]:
-        """Generate specific questions for RPM eligibility in correct priority order with strict validation."""
+    def _evaluate_telehealth_eligibility_json(self, patient_responses: Dict, rule: Dict) -> EligibilityResult:
+        """Telehealth eligibility evaluation using JSON rules."""
         
-        # Check ALL required criteria before allowing eligibility assessment
-        required_criteria = ['chronic_conditions', 'has_insurance', 'device_access', 'consent']
+        requirements = rule.get("requirements", {})
+        exclusions = rule.get("exclusion_criteria", {})
+        
+        decision_trail = []
         missing_criteria = []
+        met_requirements = []
         
-        # Check chronic conditions
-        has_chronic_condition = any(
-            condition in str(patient_responses.get('chronic_conditions', '')).lower()
-            for condition in ['diabetes', 'hypertension', 'high blood pressure', 'copd', 'heart', 'asthma', 'kidney']
-        )
-        if not has_chronic_condition:
-            missing_criteria.append('chronic_conditions')
-        
-        # Check insurance
-        if not patient_responses.get('has_insurance', False):
-            missing_criteria.append('has_insurance')
-        
-        # Check device access
-        if not patient_responses.get('device_access', False):
-            missing_criteria.append('device_access')
-        
-        # Check consent
-        if not patient_responses.get('consent', False):
-            missing_criteria.append('consent')
-        
-        # Force the LLM to ask about missing criteria in strict order
-        if missing_criteria:
-            if 'chronic_conditions' in missing_criteria:
-                return ["Do you have any chronic health conditions like diabetes, high blood pressure, or heart disease?"]
-            elif 'has_insurance' in missing_criteria:
-                return ["Do you currently have health insurance coverage?"]
-            elif 'device_access' in missing_criteria:
-                return ["Do you have access to a smartphone, tablet, or Wi-Fi at home for health monitoring?"]
-            elif 'consent' in missing_criteria:
-                return ["Are you comfortable with sharing your health data for remote monitoring purposes?"]
-        
-        # Only allow eligibility assessment when ALL criteria are met
-        return ["Based on your information, you appear to qualify for RPM. Would you like me to connect you with a specialist to discuss enrollment?"]
-    
-    def _evaluate_generic_eligibility(self, patient_responses: Dict, service: str, service_rules: List[Dict]) -> EligibilityResult:
-        """Generic eligibility evaluation for non-RPM services."""
-        total_confidence = 0.0
-        qualifying_rules = []
-        all_fallbacks = set()
-        
-        for rule in service_rules:
-            inclusion = rule.get('Inclusion Criteria', '')
-            exclusion = rule.get('Exclusion Criteria', '')
-            
-            # Calculate rule match confidence
-            rule_confidence = self._evaluate_rule_match(patient_responses, inclusion, exclusion)
-            
-            if rule_confidence > 0.3:  # Threshold for qualification
-                qualifying_rules.append(rule)
-                total_confidence += rule_confidence
+        # Check requirements
+        for req_name, req_config in requirements.items():
+            if req_config.get("required", False):
+                is_met = self._check_requirement(patient_responses, req_name, req_config, decision_trail)
                 
-                fallback = rule.get('Fallback', '')
-                if fallback:
-                    all_fallbacks.add(fallback)
+                if is_met:
+                    met_requirements.append(req_name)
+                else:
+                    missing_criteria.append(req_name)
         
-        # Average confidence across qualifying rules
-        avg_confidence = total_confidence / len(service_rules) if service_rules else 0.0
+        # Check exclusions
+        excluded = self._check_exclusions(patient_responses, exclusions, decision_trail)
         
-        qualified = avg_confidence >= 0.5
+        # Calculate results
+        total_requirements = len([r for r in requirements.values() if r.get("required", False)])
+        met_count = len(met_requirements)
         
-        reasoning = self._generate_reasoning(qualifying_rules, patient_responses)
-        next_questions = self._suggest_clarifying_questions(service_rules, patient_responses)
+        qualified = (met_count >= total_requirements) and not excluded
+        confidence = met_count / total_requirements if total_requirements > 0 else 1.0
+        
+        reasoning = self._generate_reasoning(met_requirements, missing_criteria, excluded, "Telehealth")
+        next_questions = self._generate_next_questions_json(patient_responses, requirements, missing_criteria)
+        fallback_options = rule.get("fallback_options", [])
+        
+        return EligibilityResult(
+            service="Telehealth / Virtual Primary Care",
+            qualified=qualified,
+            confidence=confidence,
+            reasoning=reasoning,
+            next_questions=next_questions,
+            fallback_options=fallback_options,
+            missing_criteria=missing_criteria,
+            decision_trail=decision_trail
+        )
+    
+    def _evaluate_insurance_eligibility_json(self, patient_responses: Dict, rule: Dict) -> EligibilityResult:
+        """Insurance enrollment eligibility evaluation using JSON rules."""
+        
+        requirements = rule.get("requirements", {})
+        enrollment_periods = rule.get("enrollment_periods", {})
+        
+        decision_trail = []
+        missing_criteria = []
+        met_requirements = []
+        
+        # Check basic requirements
+        for req_name, req_config in requirements.items():
+            if req_config.get("required", False):
+                is_met = self._check_requirement(patient_responses, req_name, req_config, decision_trail)
+                
+                if is_met:
+                    met_requirements.append(req_name)
+                else:
+                    missing_criteria.append(req_name)
+        
+        # Check enrollment period eligibility
+        enrollment_eligible = self._check_enrollment_period(patient_responses, enrollment_periods, decision_trail)
+        
+        # Calculate results
+        total_requirements = len([r for r in requirements.values() if r.get("required", False)])
+        met_count = len(met_requirements)
+        
+        # Need both requirements AND enrollment period
+        qualified = (met_count >= total_requirements) and enrollment_eligible
+        confidence = (met_count / total_requirements * 0.7 + (0.3 if enrollment_eligible else 0)) if total_requirements > 0 else 0.0
+        
+        reasoning = self._generate_insurance_reasoning(met_requirements, missing_criteria, enrollment_eligible)
+        next_questions = self._generate_next_questions_json(patient_responses, requirements, missing_criteria)
+        fallback_options = rule.get("fallback_options", [])
+        
+        return EligibilityResult(
+            service="Insurance Enrollment",
+            qualified=qualified,
+            confidence=confidence,
+            reasoning=reasoning,
+            next_questions=next_questions,
+            fallback_options=fallback_options,
+            missing_criteria=missing_criteria,
+            decision_trail=decision_trail
+        )
+    
+    def _evaluate_emergency_screening_json(self, patient_responses: Dict, rule: Dict) -> EligibilityResult:
+        """Emergency screening using JSON rules."""
+        
+        critical_symptoms = rule.get("critical_emergency_symptoms", {})
+        urgent_symptoms = rule.get("urgent_but_not_emergency", {})
+        
+        decision_trail = []
+        
+        # Check for critical emergency symptoms
+        emergency_found = False
+        emergency_action = None
+        
+        for category, symptom_data in critical_symptoms.items():
+            symptoms = symptom_data.get("symptoms", [])
+            if self._check_symptoms_present(patient_responses, symptoms):
+                emergency_found = True
+                emergency_action = symptom_data.get("action")
+                decision_trail.append({
+                    "category": category,
+                    "action": emergency_action,
+                    "message": symptom_data.get("message")
+                })
+                break
+        
+        if emergency_found:
+            return EligibilityResult(
+                service="Emergency Screening",
+                qualified=True,  # Qualified for emergency intervention
+                confidence=1.0,
+                reasoning="🚨 Emergency symptoms detected - immediate medical attention required",
+                next_questions=[],
+                fallback_options=[],
+                missing_criteria=[],
+                decision_trail=decision_trail
+            )
+        
+        # Check for urgent but non-emergency symptoms
+        urgent_found = False
+        for category, symptom_data in urgent_symptoms.items():
+            symptoms = symptom_data.get("symptoms", [])
+            if self._check_symptoms_present(patient_responses, symptoms):
+                urgent_found = True
+                decision_trail.append({
+                    "category": category,
+                    "action": symptom_data.get("action"),
+                    "timeframe": symptom_data.get("timeframe")
+                })
+                break
+        
+        if urgent_found:
+            return EligibilityResult(
+                service="Emergency Screening",
+                qualified=True,  # Qualified for urgent care
+                confidence=0.8,
+                reasoning="⚠️ Urgent symptoms detected - seek medical care within hours",
+                next_questions=[],
+                fallback_options=["Urgent care", "Telehealth consultation"],
+                missing_criteria=[],
+                decision_trail=decision_trail
+            )
+        
+        # No emergency or urgent symptoms
+        return EligibilityResult(
+            service="Emergency Screening",
+            qualified=False,  # No emergency care needed
+            confidence=0.9,
+            reasoning="✅ No emergency symptoms detected - routine care appropriate",
+            next_questions=["What specific health concerns would you like help with?"],
+            fallback_options=["Telehealth", "Primary care appointment", "Wellness programs"],
+            missing_criteria=[],
+            decision_trail=decision_trail
+        )
+    
+    def _evaluate_generic_eligibility_json(self, patient_responses: Dict, service: str, rule: Dict) -> EligibilityResult:
+        """Generic eligibility evaluation for any service using JSON rules."""
+        
+        requirements = rule.get("requirements", {})
+        decision_trail = []
+        missing_criteria = []
+        met_requirements = []
+        
+        for req_name, req_config in requirements.items():
+            if req_config.get("required", False):
+                is_met = self._check_requirement(patient_responses, req_name, req_config, decision_trail)
+                
+                if is_met:
+                    met_requirements.append(req_name)
+                else:
+                    missing_criteria.append(req_name)
+        
+        total_requirements = len([r for r in requirements.values() if r.get("required", False)])
+        met_count = len(met_requirements)
+        
+        qualified = met_count >= total_requirements
+        confidence = met_count / total_requirements if total_requirements > 0 else 1.0
+        
+        reasoning = self._generate_reasoning(met_requirements, missing_criteria, False, service)
+        next_questions = self._generate_next_questions_json(patient_responses, requirements, missing_criteria)
+        fallback_options = rule.get("fallback_options", [])
         
         return EligibilityResult(
             service=service,
             qualified=qualified,
-            confidence=avg_confidence,
+            confidence=confidence,
             reasoning=reasoning,
             next_questions=next_questions,
-            fallback_options=list(all_fallbacks)
+            fallback_options=fallback_options,
+            missing_criteria=missing_criteria,
+            decision_trail=decision_trail
         )
     
-    def _evaluate_rule_match(self, patient_responses: Dict, inclusion: str, exclusion: str) -> float:
-        """
-        Evaluate how well patient responses match inclusion/exclusion criteria.
-        Returns confidence score 0.0-1.0.
-        """
-        confidence = 0.0
+    def _check_requirement(self, patient_responses: Dict, req_name: str, req_config: Dict, decision_trail: List) -> bool:
+        """Check if a specific requirement is met."""
         
-        # Parse inclusion criteria
-        if inclusion and self._matches_criteria(patient_responses, inclusion, positive=True):
-            confidence += 0.6
+        patient_value = patient_responses.get(req_name)
+        req_type = req_config.get("type", "boolean")
         
-        # Parse exclusion criteria  
-        if exclusion and self._matches_criteria(patient_responses, exclusion, positive=False):
-            confidence -= 0.4
+        decision_entry = {
+            "requirement": req_name,
+            "expected_type": req_type,
+            "patient_value": patient_value,
+            "met": False
+        }
         
-        # Ensure confidence stays in bounds
-        return max(0.0, min(1.0, confidence))
+        if req_type == "boolean":
+            is_met = bool(patient_value)
+        elif req_type == "contains_any":
+            values = req_config.get("values", [])
+            is_met = patient_value and any(
+                val.lower() in str(patient_value).lower() 
+                for val in values
+            )
+        elif req_type == "number":
+            min_val = req_config.get("min_value")
+            max_val = req_config.get("max_value")
+            try:
+                num_val = float(patient_value) if patient_value else 0
+                is_met = True
+                if min_val and num_val < min_val:
+                    is_met = False
+                if max_val and num_val > max_val:
+                    is_met = False
+            except (ValueError, TypeError):
+                is_met = False
+        else:
+            # Default to checking if value exists
+            is_met = patient_value is not None and patient_value != ""
+        
+        decision_entry["met"] = is_met
+        decision_trail.append(decision_entry)
+        
+        return is_met
     
-    def _matches_criteria(self, responses: Dict, criteria: str, positive: bool = True) -> bool:
-        """
-        Check if patient responses match specific criteria.
-        Uses keyword matching and pattern recognition.
-        """
-        if not criteria or not responses:
-            return False
+    def _check_exclusions(self, patient_responses: Dict, exclusions: Dict, decision_trail: List) -> bool:
+        """Check if patient meets any exclusion criteria."""
         
-        # Handle case where criteria might be NaN or float
-        if not isinstance(criteria, str):
-            return False
-            
-        criteria_lower = criteria.lower()
-        
-        # Check for common health conditions
-        health_conditions = [
-            'diabetes', 'hypertension', 'high blood pressure', 'copd', 'asthma', 'heart failure', 
-            'kidney disease', 'ckd', 'chronic condition'
-        ]
-        
-        for condition in health_conditions:
-            if condition in criteria_lower:
-                has_condition = any(
-                    condition in str(response).lower() 
-                    for response in responses.values()
-                )
-                if has_condition == positive:
-                    return True
-        
-        # Check for age criteria
-        age_match = re.search(r'age.*?(\d+)', criteria_lower)
-        if age_match:
-            criteria_age = int(age_match.group(1))
-            patient_age = responses.get('age', 0)
-            
-            if 'older' in criteria_lower or '≥' in criteria or '>=' in criteria:
-                return (patient_age >= criteria_age) == positive
-            elif 'younger' in criteria_lower or '<' in criteria:
-                return (patient_age < criteria_age) == positive
-        
-        # Check for recent hospitalization
-        if 'hospital' in criteria_lower or 'admission' in criteria_lower:
-            recent_hospital = responses.get('recent_hospitalization', False)
-            return recent_hospital == positive
-        
-        # Check for insurance status
-        if 'insurance' in criteria_lower or 'medicare' in criteria_lower or 'medicaid' in criteria_lower:
-            has_insurance = responses.get('has_insurance', False)
-            return has_insurance == positive
-        
-        # Check for device access
-        if 'device' in criteria_lower or 'connectivity' in criteria_lower:
-            device_access = responses.get('device_access', False)
-            return device_access == positive
-        
-        # Check for consent
-        if 'consent' in criteria_lower:
-            consent = responses.get('consent', False)
-            return consent == positive
+        for exclusion_name, exclusion_config in exclusions.items():
+            symptoms = exclusion_config.get("symptoms", [])
+            if self._check_symptoms_present(patient_responses, symptoms):
+                decision_trail.append({
+                    "exclusion": exclusion_name,
+                    "action": exclusion_config.get("action"),
+                    "message": exclusion_config.get("message")
+                })
+                return True
         
         return False
     
-    def _generate_reasoning(self, qualifying_rules: List[Dict], responses: Dict) -> str:
-        """Generate human-readable reasoning for eligibility decision."""
-        if not qualifying_rules:
-            return "Patient does not meet eligibility criteria for this service."
+    def _check_symptoms_present(self, patient_responses: Dict, symptoms: List[str]) -> bool:
+        """Check if any of the specified symptoms are present in patient responses."""
         
-        reasoning_parts = []
-        for rule in qualifying_rules:
-            inclusion = rule.get('Inclusion Criteria', '')
-            if inclusion:
-                reasoning_parts.append(f"✅ Meets criteria: {inclusion}")
+        # Check all response values for symptom keywords
+        all_responses = " ".join(str(v).lower() for v in patient_responses.values() if v)
         
-        return " | ".join(reasoning_parts)
+        return any(symptom.lower() in all_responses for symptom in symptoms)
     
-    def _suggest_clarifying_questions(self, rules: List[Dict], responses: Dict) -> List[str]:
-        """Suggest questions to better assess eligibility."""
-        suggested = []
+    def _check_enrollment_period(self, patient_responses: Dict, enrollment_periods: Dict, decision_trail: List) -> bool:
+        """Check if patient is eligible for insurance enrollment period."""
         
-        # If no age provided, ask for it
-        if 'age' not in responses:
-            suggested.append("What is your age?")
+        # Check for open enrollment (always eligible during this period)
+        # In real implementation, would check current date
         
-        # If chronic conditions unclear, ask specifically
-        if 'chronic_conditions' not in responses:
-            suggested.append("Do you have any chronic health conditions like diabetes, high blood pressure, or heart disease?")
+        # Check for Special Enrollment Period qualifying events
+        sep_events = enrollment_periods.get("special_enrollment", {}).get("qualifying_events", [])
         
-        # If hospitalization history unclear
-        if 'recent_hospitalization' not in responses:
-            suggested.append("Have you been hospitalized in the past 6 months?")
+        all_responses = " ".join(str(v).lower() for v in patient_responses.values() if v)
         
-        # If insurance status unclear
-        if 'has_insurance' not in responses:
-            suggested.append("Do you currently have health insurance?")
+        for event in sep_events:
+            if event.lower() in all_responses:
+                decision_trail.append({
+                    "enrollment_eligibility": "SEP_qualified",
+                    "qualifying_event": event
+                })
+                return True
         
-        return suggested[:1]  # Limit to 1 question to avoid overwhelming
+        # Could add logic to check if currently in open enrollment period
+        # For now, assume they qualify
+        decision_trail.append({
+            "enrollment_eligibility": "assumed_eligible",
+            "reason": "General enrollment assistance available"
+        })
+        return True
     
-    def identify_missing_critical_data(self, context: Dict) -> List[str]:
-        """Identify what critical data is missing from patient context."""
-        missing = []
+    def _generate_reasoning(self, met_requirements: List, missing_criteria: List, excluded: bool, service: str) -> str:
+        """Generate human-readable reasoning."""
         
-        # Ensure context is a dictionary
-        if not isinstance(context, dict):
-            return ['patient information']
-        
-        # Critical data points for all services
-        critical_fields = {
-            'age': 'age',
-            'chronic_conditions': 'chronic health conditions',
-            'recent_hospitalization': 'recent hospitalization history',
-            'has_insurance': 'insurance status',
-            'device_access': 'device access',
-            'consent': 'data sharing consent',
-            'state': 'state of residence',
-            'household_income': 'household income'
-        }
-        
-        for field, description in critical_fields.items():
-            if field not in context or context[field] is None or context[field] == '':
-                missing.append(description)
-        
-        return missing
+        if excluded:
+            return f"❌ Excluded from {service} due to safety or clinical criteria"
+        elif missing_criteria:
+            return f"Missing {len(missing_criteria)} required criteria: {', '.join(missing_criteria)}"
+        else:
+            return f"✅ Meets all requirements for {service}"
     
-    def get_next_assessment_questions(self, context: Dict, service_type: str = None) -> List[str]:
-        """Generate next questions based on current context and missing data."""
-        # Get all available questions
-        all_questions = self.generate_assessment_questions()
+    def _generate_insurance_reasoning(self, met_requirements: List, missing_criteria: List, enrollment_eligible: bool) -> str:
+        """Generate insurance-specific reasoning."""
         
-        # Ensure context is a dictionary
-        if not isinstance(context, dict):
-            context = {}
+        if missing_criteria and not enrollment_eligible:
+            return f"Missing requirements: {', '.join(missing_criteria)} AND not in enrollment period"
+        elif missing_criteria:
+            return f"Missing {len(missing_criteria)} required criteria: {', '.join(missing_criteria)}"
+        elif not enrollment_eligible:
+            return "Not currently in open enrollment period and no qualifying life events detected"
+        else:
+            return "✅ Meets all requirements and eligible for enrollment"
+    
+    def _generate_next_questions_json(self, patient_responses: Dict, requirements: Dict, missing_criteria: List) -> List[str]:
+        """Generate next questions based on missing criteria from JSON rules."""
         
-        # Special handling for RPM service
-        if service_type and service_type.lower() in ['rpm', 'remote patient monitoring']:
-            return self._generate_rpm_questions_enhanced(context, 0)
+        questions = []
         
-        # Identify missing critical data
-        missing_data = self.identify_missing_critical_data(context)
+        for missing in missing_criteria[:1]:  # Limit to 1 question
+            req_config = requirements.get(missing, {})
+            question = req_config.get("question")
+            if question:
+                questions.append(question)
         
-        # Filter questions based on missing information and service type
-        relevant_questions = []
+        return questions
+    
+    def get_next_assessment_questions(self, context: Dict, service_type: Optional[str] = None) -> List[str]:
+        """Enhanced question generation using JSON assessment database."""
         
-        for question in all_questions:
-            question_text = question['question'].lower()
+        # Use assessment questions from JSON if available
+        if "assessment" in self.rules:
+            return self._get_questions_from_json_db(context, service_type)
+        
+        # Fallback to simple rule-based questions
+        return self._get_fallback_questions(context, service_type)
+    
+    def _get_questions_from_json_db(self, context: Dict, service_type: str) -> List[str]:
+        """Get questions from JSON assessment database with improved tracking."""
+        
+        assessment_rules = self.rules.get("assessment", {})
+        question_categories = assessment_rules.get("question_categories", {})
+        
+        # Get service-specific flow if available
+        flow_logic = assessment_rules.get("question_flow_logic", {})
+        service_specific = flow_logic.get("service_specific", {})
+        
+        service_key = self._normalize_service_name(service_type) if service_type else None
+        
+        # Track asked questions to prevent repetition
+        asked_questions = context.get("_asked_questions", [])
+        
+        if service_key and service_key in service_specific:
+            required_questions = service_specific[service_key].get("required_questions", [])
             
-            # Check if question addresses missing data
-            is_relevant = False
-            for missing in missing_data:
-                if any(keyword in question_text for keyword in missing.split()):
-                    is_relevant = True
-                    break
-            
-            # Service-specific relevance
-            if service_type:
-                service_keywords = {
-                    'rpm': ['chronic', 'diabetes', 'hypertension', 'copd', 'heart', 'device', 'monitor'],
-                    'telehealth': ['state', 'device', 'video', 'virtual', 'appointment'],
-                    'insurance': ['income', 'ssn', 'enrollment', 'medicare', 'marketplace']
-                }
-                
-                if service_type.lower() in service_keywords:
-                    if any(keyword in question_text for keyword in service_keywords[service_type.lower()]):
-                        is_relevant = True
-            
-            if is_relevant:
-                relevant_questions.append(question['question'])
+            # Find first unanswered required question that hasn't been asked
+            for question_id in required_questions:
+                if (question_id not in context or not context[question_id]) and question_id not in asked_questions:
+                    # Find the actual question text
+                    question_text = self._find_question_by_id(question_categories, question_id)
+                    if question_text:
+                        # Mark this question as asked
+                        if "_asked_questions" not in context:
+                            context["_asked_questions"] = []
+                        context["_asked_questions"].append(question_id)
+                        return [question_text]
         
-        # If no specific missing data, return general priority questions
-        if not relevant_questions:
-            priority_questions = [
-                "What is your age?",
-                "Do you have any chronic health conditions?",
-                "Do you currently have health insurance?"
-            ]
-            return priority_questions[:1]
+        # Default priority questions - check if already asked
+        priority_categories = ["emergency_symptoms", "chronic_conditions", "insurance_status", "age"]
         
-        return relevant_questions[:1]  # Limit to 1 question
+        for category in priority_categories:
+            if category in question_categories:
+                questions = question_categories[category].get("questions", [])
+                for q in questions:
+                    question_id = q.get("id")
+                    if (question_id not in context or not context[question_id]) and question_id not in asked_questions:
+                        # Mark this question as asked
+                        if "_asked_questions" not in context:
+                            context["_asked_questions"] = []
+                        context["_asked_questions"].append(question_id)
+                        return [q.get("text")]
+        
+        return ["How can I help you with your healthcare needs today?"]
     
-    def filter_questions_by_priority(self, questions: List[Dict], missing_data: List[str]) -> List[str]:
-        """Filter questions by priority based on missing critical data."""
-        priority_questions = []
+    def _find_question_by_id(self, question_categories: Dict, question_id: str) -> Optional[str]:
+        """Find question text by ID in question categories."""
         
-        # High priority questions for critical missing data
-        high_priority_keywords = ['age', 'chronic', 'insurance', 'hospital']
-        
-        for question in questions:
-            question_text = question['question'].lower()
-            
-            # Check if question addresses high priority missing data
-            if any(keyword in question_text for keyword in high_priority_keywords):
-                if any(missing in question_text for missing in missing_data):
-                    priority_questions.append(question['question'])
-        
-        # If we have high priority questions, return them
-        if priority_questions:
-            return priority_questions[:1]
-        
-        # Otherwise return general questions
-        return [q['question'] for q in questions[:1]]
+        for category, category_data in question_categories.items():
+            questions = category_data.get("questions", [])
+            for q in questions:
+                if q.get("id") == question_id:
+                    return q.get("text")
+        return None
     
-    def assess_service_specific_eligibility(self, service_type: str, patient_responses: Dict) -> EligibilityResult:
-        """Assess eligibility for a specific service using CSV rules."""
-        return self.evaluate_patient_against_rules(patient_responses, service_type)
+    def _get_fallback_questions(self, context: Dict, service_type: str) -> List[str]:
+        """Fallback questions if JSON assessment not available."""
+        
+        if service_type and "rpm" in service_type.lower():
+            if "chronic_conditions" not in context:
+                return ["Do you have any chronic health conditions like diabetes, high blood pressure, or heart disease?"]
+            elif "insurance_coverage" not in context:
+                return ["Do you currently have health insurance coverage?"]
+            elif "device_access" not in context:
+                return ["Do you have access to a smartphone, tablet, or Wi-Fi at home?"]
+            elif "consent_monitoring" not in context:
+                return ["Are you comfortable with sharing your health data for remote monitoring?"]
+        elif service_type and "wellness" in service_type.lower():
+            if "age" not in context:
+                return ["What is your age?"]
+            elif "care_goals" not in context:
+                return ["What are your main healthcare goals? (e.g., lose weight, prevent diabetes, reduce stress)"]
+            elif "lifestyle_factors" not in context:
+                return ["Which of these describes your current lifestyle? (e.g., sedentary, unhealthy diet, high stress)"]
+            elif "chronic_conditions" not in context:
+                return ["Do you have any chronic health conditions or risk factors?"]
+        
+        # Generic fallback questions
+        return ["What is your age?", "Do you have any chronic health conditions?", "Do you currently have health insurance?"][:1]
 
-# Tool functions for the ADK agents
+# Updated tool functions to use JSON rules engine
 def load_dynamic_rules() -> str:
-    """Tool to load CSV rules and return summary."""
-    import sys
-    from pathlib import Path
+    """Tool to load JSON rules and return summary."""
+    rules_engine = JSONRulesEngine("rules")
     
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
-    from config import CSV_PATHS
-    csv_paths = CSV_PATHS
-    
-    rules_engine = DynamicRulesEngine(csv_paths)
-    
-    # Get service counts
     service_counts = {}
-    if rules_engine.initial_use_cases is not None:
-        service_counts = rules_engine.initial_use_cases['Program'].value_counts().to_dict()
-    
-    questions_count = len(rules_engine.generate_assessment_questions())
+    for service, rule_data in rules_engine.rules.items():
+        service_counts[service] = rule_data.get("version", "1.0")
     
     summary = f"""
-    📋 Enhanced Rules Engine Loaded:
+    📋 Enhanced JSON Rules Engine Loaded:
     
     Services Available:
     {json.dumps(service_counts, indent=2)}
     
-    Total Assessment Questions: {questions_count}
-    
-    Ready to process patient routing decisions with improved logic!
+    Ready to process patient routing decisions with improved JSON-based logic!
     """
     
     return summary
 
 def assess_eligibility_dynamically(patient_data: str) -> str:
-    """Tool to assess patient eligibility using CSV rules."""
+    """Tool to assess patient eligibility using JSON rules."""
     try:
-        # Parse patient data (expecting JSON string)
-        patient_responses = json.loads(patient_data)
+        patient_responses = json.loads(patient_data) if isinstance(patient_data, str) else patient_data
     except:
         return "❌ Error: Patient data must be in JSON format"
     
-    import sys
-    from pathlib import Path
+    rules_engine = JSONRulesEngine("rules")
     
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
-    from config import CSV_PATHS
-    csv_paths = CSV_PATHS
-    
-    rules_engine = DynamicRulesEngine(csv_paths)
-    
-    # Evaluate each service
     services = ["Remote Patient Monitoring", "Telehealth", "Insurance"]
     results = []
     
@@ -555,28 +652,15 @@ def assess_eligibility_dynamically(patient_data: str) -> str:
     
     return "\n".join(results)
 
-def get_next_assessment_questions(current_responses: str, service_type: str = None) -> str:
-    """Tool to get the next questions to ask based on current responses and service type."""
-    import sys
-    from pathlib import Path
+def get_next_assessment_questions(current_responses: str, service_type: Optional[str] = None) -> str:
+    """Tool to get next questions using JSON rules."""
+    rules_engine = JSONRulesEngine("rules")
     
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
-    from config import CSV_PATHS
-    csv_paths = CSV_PATHS
-    
-    rules_engine = DynamicRulesEngine(csv_paths)
-    
-    # Parse current responses
     try:
         responses = json.loads(current_responses) if current_responses else {}
     except:
         responses = {}
     
-    # Get next questions based on missing data and service type
     next_questions = rules_engine.get_next_assessment_questions(responses, service_type)
     
     if not next_questions:
@@ -585,28 +669,15 @@ def get_next_assessment_questions(current_responses: str, service_type: str = No
     return "Next questions to ask:\n" + "\n".join(f"• {q}" for q in next_questions)
 
 def assess_service_specific_eligibility(service_type: str, patient_responses: str) -> str:
-    """Tool to assess eligibility for a specific service using CSV rules."""
-    import sys
-    from pathlib import Path
+    """Tool to assess eligibility for specific service using JSON rules."""
+    rules_engine = JSONRulesEngine("rules")
     
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
-    from config import CSV_PATHS
-    csv_paths = CSV_PATHS
-    
-    rules_engine = DynamicRulesEngine(csv_paths)
-    
-    # Parse patient responses
     try:
         responses = json.loads(patient_responses) if patient_responses else {}
     except:
         return "❌ Error: Patient responses must be in JSON format"
     
-    # Assess eligibility for specific service
-    result = rules_engine.assess_service_specific_eligibility(service_type, responses)
+    result = rules_engine.evaluate_patient_against_rules(responses, service_type)
     
     status = "✅ QUALIFIED" if result.qualified else "❌ NOT QUALIFIED"
     confidence_pct = f"{result.confidence:.0%}"
@@ -624,18 +695,3 @@ def assess_service_specific_eligibility(service_type: str, patient_responses: st
         response += f"Next Questions: {'; '.join(result.next_questions)}"
     
     return response
-
-# Example usage
-if __name__ == "__main__":
-    # Test the rules engine
-    print(load_dynamic_rules())
-    
-    # Test patient assessment
-    sample_patient = {
-        "age": 45,
-        "chronic_conditions": "high blood pressure", 
-        "has_insurance": True,
-        "recent_hospitalization": False
-    }
-    
-    print(assess_eligibility_dynamically(json.dumps(sample_patient)))

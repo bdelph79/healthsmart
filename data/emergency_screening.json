@@ -1,0 +1,206 @@
+
+{
+    "rule_id": "emergency_screening_v2_0",
+    "service": "Emergency Screening",
+    "version": "2.0.0",
+    "effective_date": "2025-01-01",
+    "description": "Immediate emergency condition screening and triage",
+    
+    "critical_emergency_symptoms": {
+      "cardiovascular": {
+        "symptoms": [
+          "chest pain", "severe chest pain", "crushing chest pain",
+          "chest pressure", "heart attack symptoms",
+          "radiating arm pain", "jaw pain with chest discomfort",
+          "severe shortness of breath", "can't breathe",
+          "palpitations with chest pain", "irregular heartbeat with symptoms"
+        ],
+        "action": "call_911_immediately",
+        "message": "Call 911 immediately. These may be signs of a heart attack."
+      },
+      "neurological": {
+        "symptoms": [
+          "stroke symptoms", "face drooping", "facial droop",
+          "arm weakness", "speech difficulty", "slurred speech",
+          "severe headache", "worst headache of life",
+          "sudden vision loss", "sudden hearing loss",
+          "loss of consciousness", "passed out", "fainted",
+          "seizure", "convulsions", "severe confusion"
+        ],
+        "action": "call_911_immediately", 
+        "message": "Call 911 immediately. These may be signs of a stroke or serious neurological emergency."
+      },
+      "respiratory": {
+        "symptoms": [
+          "severe difficulty breathing", "cannot speak in full sentences",
+          "blue lips", "blue fingers", "cyanosis",
+          "severe asthma attack", "cannot catch breath",
+          "choking", "airway obstruction"
+        ],
+        "action": "call_911_immediately",
+        "message": "Call 911 immediately. This is a breathing emergency."
+      },
+      "allergic_reaction": {
+        "symptoms": [
+          "severe allergic reaction", "anaphylaxis",
+          "swelling of face", "swelling of throat",
+          "difficulty swallowing", "hives with breathing problems",
+          "severe itching with breathing issues"
+        ],
+        "action": "call_911_immediately",
+        "message": "Call 911 immediately. This may be a severe allergic reaction."
+      },
+      "trauma": {
+        "symptoms": [
+          "severe bleeding", "uncontrolled bleeding",
+          "major trauma", "car accident",
+          "head injury", "loss of consciousness from injury",
+          "broken bones", "visible bone", "deformed limb",
+          "severe burns", "electrical burns"
+        ],
+        "action": "call_911_immediately",
+        "message": "Call 911 immediately. This requires emergency medical attention."
+      },
+      "other_critical": {
+        "symptoms": [
+          "thoughts of suicide", "want to hurt myself",
+          "thoughts of hurting others", "violent thoughts",
+          "severe abdominal pain", "appendicitis symptoms",
+          "severe vomiting", "signs of dehydration",
+          "high fever over 103°F", "fever with stiff neck",
+          "diabetic emergency", "very high blood sugar", "very low blood sugar"
+        ],
+        "action": "immediate_intervention",
+        "message": "This requires immediate medical attention."
+      }
+    },
+    
+    "urgent_but_not_emergency": {
+      "infections": {
+        "symptoms": [
+          "fever over 101°F", "persistent fever",
+          "severe sore throat", "difficulty swallowing", 
+          "ear pain", "severe headache",
+          "urinary tract infection", "painful urination",
+          "skin infection", "red streaks", "infected wound"
+        ],
+        "action": "urgent_care_same_day",
+        "timeframe": "within 4-6 hours"
+      },
+      "injuries": {
+        "symptoms": [
+          "minor cuts needing stitches", "deep cuts",
+          "sprains", "minor fractures", "possible broken bone",
+          "eye injury", "foreign object in eye",
+          "burns", "minor burns", "chemical exposure"
+        ],
+        "action": "urgent_care_same_day",
+        "timeframe": "within 2-4 hours"
+      },
+      "gastrointestinal": {
+        "symptoms": [
+          "severe nausea", "persistent vomiting",
+          "severe diarrhea", "blood in stool",
+          "severe abdominal pain", "kidney stones"
+        ],
+        "action": "urgent_care_same_day",
+        "timeframe": "within 4-8 hours"
+      }
+    },
+    
+    "routine_care_appropriate": {
+      "common_conditions": [
+        "cold symptoms", "mild fever under 101°F",
+        "cough", "runny nose", "congestion",
+        "minor rashes", "mild headache",
+        "muscle aches", "minor cuts",
+        "medication refills", "chronic disease follow-up",
+        "preventive care", "routine check-up"
+      ],
+      "action": "schedule_routine_appointment",
+      "timeframe": "within 1-3 days"
+    },
+    
+    "mental_health_screening": {
+      "suicide_risk": {
+        "questions": [
+          "Are you having thoughts of hurting yourself?",
+          "Do you have a plan to hurt yourself?",
+          "Have you thought about suicide?"
+        ],
+        "positive_response_action": "crisis_intervention_immediately",
+        "resources": [
+          "National Suicide Prevention Lifeline: 988",
+          "Crisis Text Line: Text HOME to 741741",
+          "Emergency: Call 911"
+        ]
+      },
+      "violence_risk": {
+        "questions": [
+          "Are you having thoughts of hurting others?",
+          "Do you feel like you might hurt someone?",
+          "Are you in danger from someone else?"
+        ],
+        "positive_response_action": "crisis_intervention_immediately"
+      },
+      "depression_anxiety": {
+        "symptoms": [
+          "persistent sadness", "loss of interest",
+          "anxiety", "panic attacks",
+          "sleep problems", "appetite changes",
+          "difficulty concentrating"
+        ],
+        "action": "mental_health_referral",
+        "timeframe": "within 1 week"
+      }
+    },
+    
+    "triage_questions": {
+      "pain_scale": {
+        "question": "On a scale of 1-10, how would you rate your pain?",
+        "high_priority": ">= 8",
+        "moderate_priority": "5-7",
+        "low_priority": "1-4"
+      },
+      "symptom_duration": {
+        "question": "How long have you had these symptoms?",
+        "immediate": "sudden onset, less than 1 hour",
+        "urgent": "several hours to 1 day", 
+        "routine": "several days to weeks"
+      },
+      "functional_impact": {
+        "question": "Are these symptoms preventing you from normal activities?",
+        "severe": "cannot function, bedridden",
+        "moderate": "significantly limited",
+        "mild": "some limitation but manageable"
+      }
+    },
+    
+    "disposition_actions": {
+      "call_911_immediately": {
+        "message": "Call 911 immediately or go to the nearest emergency room.",
+        "follow_up": "none_needed"
+      },
+      "emergency_room_now": {
+        "message": "Go to the emergency room now. Do not drive yourself.",
+        "follow_up": "none_needed"
+      },
+      "urgent_care_same_day": {
+        "message": "Visit urgent care or emergency room within 4-6 hours.",
+        "follow_up": "schedule_if_worsens"
+      },
+      "schedule_routine_appointment": {
+        "message": "Schedule an appointment with your primary care provider within 1-3 days.",
+        "follow_up": "monitor_symptoms"
+      },
+      "telehealth_appropriate": {
+        "message": "This condition can be evaluated through a telehealth visit.",
+        "follow_up": "schedule_virtual_visit"
+      },
+      "crisis_intervention_immediately": {
+        "message": "Connecting you with crisis support immediately.",
+        "resources": ["988 Suicide & Crisis Lifeline", "Crisis Text Line", "Emergency Services"],
+        "follow_up": "ongoing_mental_health_support"
+      }
+    }
+  }

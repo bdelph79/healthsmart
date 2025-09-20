@@ -1,4 +1,4 @@
-// rules/rpm_eligibility.json
+
 {
     "rule_id": "rpm_chronic_conditions_v2_1",
     "service": "Remote Patient Monitoring",

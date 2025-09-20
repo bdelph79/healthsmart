@@ -1,0 +1,204 @@
+
+{
+    "rule_id": "insurance_enrollment_v1_3",
+    "service": "Insurance Enrollment", 
+    "version": "1.3.0",
+    "effective_date": "2025-01-01",
+    "description": "Health insurance enrollment eligibility and assistance",
+    
+    "requirements": {
+      "us_residency": {
+        "required": true,
+        "type": "boolean",
+        "question": "Are you a U.S. citizen or have eligible immigration status?",
+        "legal_requirement": true,
+        "documentation_needed": ["passport", "birth_certificate", "naturalization_certificate", "green_card"]
+      },
+      "ssn_or_tin": {
+        "required": true,
+        "type": "boolean", 
+        "question": "Do you have a Social Security Number or Tax Identification Number?",
+        "legal_requirement": true
+      },
+      "state_residency": {
+        "required": true,
+        "type": "string",
+        "question": "What state do you live in?",
+        "note": "Insurance plans vary by state"
+      },
+      "current_insurance_status": {
+        "required": true,
+        "type": "single_choice",
+        "options": [
+          "No insurance currently",
+          "Employer insurance (want to compare)",
+          "Individual insurance (want to change)",
+          "Medicare",
+          "Medicaid",
+          "COBRA",
+          "Short-term insurance"
+        ],
+        "question": "What is your current health insurance situation?"
+      },
+      "household_size": {
+        "required": true,
+        "type": "number",
+        "question": "How many people are in your household (including yourself)?",
+        "note": "Affects subsidy eligibility calculations"
+      },
+      "annual_income": {
+        "required": true,
+        "type": "number",
+        "question": "What is your estimated annual household income before taxes?",
+        "note": "Used to determine subsidy eligibility",
+        "ranges": {
+          "low_income": {"max": 31200, "household_size": 1},
+          "moderate_income": {"max": 49960, "household_size": 1},
+          "subsidy_eligible": {"max": 62040, "household_size": 1}
+        }
+      }
+    },
+    
+    "enrollment_periods": {
+      "open_enrollment": {
+        "dates": "November 1 - January 15",
+        "description": "Annual open enrollment period for marketplace plans",
+        "automatically_eligible": true
+      },
+      "special_enrollment": {
+        "qualifying_events": [
+          "Lost job-based health coverage",
+          "Lost coverage due to divorce or legal separation", 
+          "Death of family member who provided coverage",
+          "Got married",
+          "Had a baby or adopted a child",
+          "Moved to a new area",
+          "Lost Medicaid or CHIP coverage",
+          "Became eligible for employer coverage",
+          "Income changed affecting subsidy eligibility",
+          "Became a U.S. citizen",
+          "Released from incarceration",
+          "Aged out of parent's plan (turned 26)",
+          "Plan discontinued by insurance company"
+        ],
+        "enrollment_window": "60 days from qualifying event",
+        "documentation_required": true
+      }
+    },
+    
+    "eligibility_assessment": {
+      "marketplace_subsidy": {
+        "income_requirements": {
+          "minimum": "100% Federal Poverty Level",
+          "maximum": "400% Federal Poverty Level"
+        },
+        "calculation_factors": ["household_income", "household_size", "state"],
+        "subsidy_types": ["Premium Tax Credits", "Cost-Sharing Reductions"]
+      },
+      "medicaid_eligibility": {
+        "expansion_states": [
+          "CA", "NY", "WA", "OR", "NV", "CO", "NM", "MN", "IA", "IL", "MI", "OH", "KY", "WV", "VA", "MD", "DE", "NJ", "CT", "RI", "MA", "VT", "NH", "ME", "AK", "HI", "AZ", "MT", "ND", "LA", "IN", "PA", "DC"
+        ],
+        "income_limit": "138% Federal Poverty Level",
+        "no_asset_test": true
+      },
+      "medicare_eligibility": {
+        "age_requirement": 65,
+        "disability_eligible": true,
+        "esrd_eligible": true,
+        "als_eligible": true
+      }
+    },
+    
+    "plan_types": {
+      "marketplace_plans": {
+        "bronze": {
+          "actuarial_value": "60%",
+          "description": "Lower monthly premiums, higher out-of-pocket costs",
+          "best_for": "Healthy individuals, catastrophic protection"
+        },
+        "silver": {
+          "actuarial_value": "70%", 
+          "description": "Moderate premiums and out-of-pocket costs",
+          "best_for": "Most people, eligible for cost-sharing reductions",
+          "csr_eligible": true
+        },
+        "gold": {
+          "actuarial_value": "80%",
+          "description": "Higher premiums, lower out-of-pocket costs", 
+          "best_for": "Regular medical care needs"
+        },
+        "platinum": {
+          "actuarial_value": "90%",
+          "description": "Highest premiums, lowest out-of-pocket costs",
+          "best_for": "High medical needs"
+        }
+      },
+      "medicare_plans": {
+        "medicare_advantage": {
+          "description": "Private insurance alternative to Original Medicare",
+          "includes": ["Part A", "Part B", "often Part D"]
+        },
+        "medicare_supplement": {
+          "description": "Insurance to fill gaps in Original Medicare",
+          "requires": "Original Medicare enrollment"
+        },
+        "part_d": {
+          "description": "Prescription drug coverage",
+          "standalone": true
+        }
+      }
+    },
+    
+    "required_documentation": {
+      "identity": ["Driver's license", "State ID", "Passport"],
+      "citizenship": ["Birth certificate", "Passport", "Naturalization certificate"],
+      "income": ["Tax returns", "Pay stubs", "W-2 forms", "1099 forms"],
+      "current_coverage": ["Insurance cards", "COBRA letters", "Termination notices"],
+      "household": ["Tax returns showing dependents", "Birth certificates for children"]
+    },
+    
+    "assistance_services": {
+      "plan_comparison": {
+        "included": true,
+        "description": "Side-by-side comparison of available plans"
+      },
+      "subsidy_calculation": {
+        "included": true,
+        "description": "Estimate of premium tax credits and cost-sharing reductions"
+      },
+      "enrollment_support": {
+        "included": true,
+        "description": "Help completing applications and enrollment"
+      },
+      "post_enrollment": {
+        "included": true,
+        "description": "Help understanding benefits and using insurance"
+      }
+    },
+    
+    "cost_estimates": {
+      "no_cost_service": true,
+      "funding": "Navigator grants and insurance company partnerships",
+      "no_bias": "Independent advice, not tied to specific insurance companies"
+    },
+    
+    "fallback_options": [
+      "Community health centers for uninsured care",
+      "Pharmacy savings programs for medications",
+      "Hospital charity care programs",
+      "Free and sliding-scale clinics",
+      "Prescription assistance programs",
+      "Emergency Medicaid for emergency services",
+      "Short-term insurance plans (limited coverage)",
+      "Health sharing plans (not insurance)"
+    ],
+    
+    "timeline": {
+      "initial_consultation": "30-45 minutes",
+      "plan_research": "1-2 days",
+      "application_completion": "1 hour with assistance",
+      "approval_processing": "2-4 weeks",
+      "coverage_start": "First day of following month (or special enrollment effective date)"
+    }
+  }

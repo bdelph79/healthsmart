@@ -335,7 +335,7 @@ class ServiceSelector:
         self.agent = service_selector_agent
         self.session_service = InMemorySessionService()
         
-    async def handle_service_selection(self, user_id: str, message: str, session_id: str = None):
+    async def handle_service_selection(self, user_id: str, message: str, session_id: Optional[str] = None):
         """Main entry point for service selection interactions."""
         
         if not session_id:

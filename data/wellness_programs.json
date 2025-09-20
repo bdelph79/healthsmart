@@ -1,0 +1,258 @@
+
+{
+    "rule_id": "wellness_programs_v1_0",
+    "service": "Wellness Programs",
+    "version": "1.0.0", 
+    "effective_date": "2025-01-01",
+    "description": "Wellness and prevention program eligibility",
+    
+    "programs": {
+      "weight_management": {
+        "eligibility": {
+          "bmi": {
+            "required": true,
+            "min_value": 25,
+            "question": "What is your height and weight? (We'll calculate your BMI)"
+          },
+          "motivation": {
+            "required": true,
+            "type": "boolean",
+            "question": "Are you motivated to make lifestyle changes for weight management?"
+          },
+          "medical_clearance": {
+            "required_if_bmi": ">= 35",
+            "question": "Have you been cleared by a doctor for exercise and diet changes?"
+          }
+        },
+        "program_components": [
+          "Nutrition counseling",
+          "Exercise planning", 
+          "Behavioral coaching",
+          "Progress tracking",
+          "Group support sessions"
+        ],
+        "duration": "12 weeks",
+        "cost": "covered_by_most_insurance"
+      },
+      
+      "diabetes_prevention": {
+        "eligibility": {
+          "prediabetes_risk": {
+            "required": true,
+            "type": "contains_any",
+            "values": [
+              "family history diabetes", "prediabetes", "gestational diabetes",
+              "high blood sugar", "a1c 5.7-6.4", "glucose intolerance",
+              "diabetes prevention", "prevent diabetes", "diabetes risk"
+            ],
+            "question": "Do you have prediabetes, family history of diabetes, or other diabetes risk factors?"
+          },
+          "age": {
+            "required": true,
+            "min_value": 18,
+            "question": "What is your age?"
+          },
+          "commitment": {
+            "required": true,
+            "type": "boolean",
+            "question": "Can you commit to a 12-month lifestyle change program?"
+          },
+          "lifestyle_factors": {
+            "required": true,
+            "type": "contains_any",
+            "values": [
+              "sedentary", "no exercise", "processed foods", "unhealthy diet",
+              "stress eating", "irregular meals", "sugary drinks"
+            ],
+            "question": "Which of these describes your current lifestyle? (Select all that apply)"
+          }
+        },
+        "program_components": [
+          "CDC-recognized curriculum",
+          "Lifestyle coaching",
+          "Nutrition education",
+          "Physical activity support",
+          "Peer support groups",
+          "Progress monitoring"
+        ],
+        "duration": "12 months",
+        "sessions": "16 sessions over 6 months, then monthly",
+        "cost": "often_covered_by_medicare_insurance"
+      },
+      
+      "smoking_cessation": {
+        "eligibility": {
+          "tobacco_use": {
+            "required": true,
+            "type": "contains_any", 
+            "values": ["smoke", "tobacco", "cigarettes", "vaping", "e-cigarettes", "chewing tobacco"],
+            "question": "Do you currently use tobacco products (cigarettes, vaping, chewing tobacco)?"
+          },
+          "quit_motivation": {
+            "required": true,
+            "type": "single_choice",
+            "options": [
+              "Ready to quit now",
+              "Thinking about quitting", 
+              "Not ready to quit but interested in information"
+            ],
+            "question": "How ready are you to quit using tobacco?"
+          }
+        },
+        "program_components": [
+          "Counseling sessions",
+          "Nicotine replacement therapy",
+          "Prescription medications (if appropriate)",
+          "Behavioral support",
+          "Relapse prevention",
+          "Follow-up support"
+        ],
+        "duration": "3-6 months",
+        "success_rate": "70% with comprehensive program",
+        "cost": "covered_by_most_insurance"
+      },
+      
+      "stress_management": {
+        "eligibility": {
+          "stress_level": {
+            "required": true,
+            "type": "scale_1_10",
+            "min_value": 5,
+            "question": "On a scale of 1-10, how would you rate your current stress level?"
+          },
+          "stress_impact": {
+            "required": true,
+            "type": "boolean",
+            "question": "Is stress affecting your daily life, work, or relationships?"
+          }
+        },
+        "program_components": [
+          "Stress assessment",
+          "Mindfulness training",
+          "Relaxation techniques",
+          "Cognitive behavioral strategies",
+          "Lifestyle modifications",
+          "Ongoing support"
+        ],
+        "duration": "8 weeks",
+        "format": "group_and_individual_sessions"
+      },
+      
+      "chronic_disease_self_management": {
+        "eligibility": {
+          "chronic_condition": {
+            "required": true,
+            "type": "contains_any",
+            "values": [
+              "diabetes", "hypertension", "heart disease", "copd", "arthritis",
+              "chronic pain", "depression", "anxiety", "asthma"
+            ],
+            "question": "Do you have a chronic health condition you'd like to manage better?"
+          },
+          "self_management_interest": {
+            "required": true,
+            "type": "boolean", 
+            "question": "Are you interested in learning skills to better manage your health condition?"
+          }
+        },
+        "program_components": [
+          "Disease education",
+          "Self-monitoring skills",
+          "Medication management",
+          "Symptom management",
+          "Communication with healthcare providers",
+          "Goal setting and action planning"
+        ],
+        "duration": "6 weeks",
+        "format": "group_workshops"
+      },
+      
+      "mental_wellness": {
+        "eligibility": {
+          "mental_health_interest": {
+            "required": true,
+            "type": "contains_any",
+            "values": [
+              "stress", "anxiety", "mild depression", "mood",
+              "coping skills", "resilience", "emotional wellness"
+            ],
+            "question": "Are you interested in improving your mental wellness and emotional health?"
+          },
+          "severity_check": {
+            "exclusion": "severe mental health crisis",
+            "referral_needed": "active suicidal thoughts, severe depression, psychosis"
+          }
+        },
+        "program_components": [
+          "Mental health education",
+          "Coping strategies",
+          "Mindfulness and meditation",
+          "Social support building",
+          "Stress reduction techniques",
+          "Resilience training"
+        ],
+        "duration": "8 weeks",
+        "professional_referral": "available if needed"
+      }
+    },
+    
+    "general_requirements": {
+      "age": {
+        "min": 18,
+        "max": null,
+        "note": "Some programs available for all ages, others 18+"
+      },
+      "participation_commitment": {
+        "required": true,
+        "question": "Can you commit to regular participation in the program?"
+      },
+      "health_screening": {
+        "basic_required": true,
+        "physician_clearance": "required for high-intensity programs"
+      }
+    },
+    
+    "program_delivery": {
+      "formats": [
+        "In-person group sessions",
+        "Virtual group sessions", 
+        "One-on-one coaching",
+        "Self-paced online modules",
+        "Hybrid (combination)"
+      ],
+      "scheduling": {
+        "flexible": true,
+        "evening_options": true,
+        "weekend_options": true
+      }
+    },
+    
+    "cost_and_coverage": {
+      "insurance_coverage": "many programs covered by insurance",
+      "medicare_coverage": "diabetes prevention, tobacco cessation covered",
+      "employer_wellness": "often covered by employer wellness programs",
+      "sliding_scale": "available for uninsured participants",
+      "cost_range": "$0 - $200 depending on program and insurance"
+    },
+    
+    "outcomes_tracking": {
+      "health_metrics": [
+        "Weight", "BMI", "Blood pressure", "A1C", "Cholesterol",
+        "Fitness level", "Stress level", "Sleep quality"
+      ],
+      "behavioral_metrics": [
+        "Program attendance", "Goal achievement", "Lifestyle changes",
+        "Self-efficacy", "Quality of life"
+      ],
+      "follow_up": "3, 6, and 12 months post-program"
+    },
+    
+    "fallback_options": [
+      "Community wellness programs",
+      "Online wellness resources",
+      "Fitness center partnerships",
+      "Health education materials",
+      "Peer support groups",
+      "Individual health coaching"
+    ]
+  }

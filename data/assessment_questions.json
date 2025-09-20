@@ -1,0 +1,332 @@
+
+{
+    "rule_id": "assessment_questions_v1_0",
+    "version": "1.0.0",
+    "effective_date": "2025-01-01",
+    "description": "Comprehensive question database for patient assessment",
+    
+    "question_categories": {
+      "demographics": {
+        "priority": "high",
+        "questions": [
+          {
+            "id": "age",
+            "text": "What is your age?",
+            "type": "number",
+            "required": true,
+            "validation": {"min": 0, "max": 120}
+          },
+          {
+            "id": "gender", 
+            "text": "What is your gender?",
+            "type": "single_choice",
+            "options": ["Male", "Female", "Non-binary", "Prefer not to answer"],
+            "required": false
+          },
+          {
+            "id": "state_residence",
+            "text": "What state do you live in?", 
+            "type": "single_choice",
+            "options": ["All 50 US states + DC"],
+            "required": true
+          }
+        ]
+      },
+      
+      "health_status": {
+        "priority": "critical",
+        "questions": [
+          {
+            "id": "chronic_conditions",
+            "text": "Do you have any of these chronic health conditions? (Select all that apply)",
+            "type": "multiple_choice",
+            "options": [
+              "Type 1 Diabetes",
+              "Type 2 Diabetes", 
+              "High Blood Pressure (Hypertension)",
+              "COPD (Chronic Obstructive Pulmonary Disease)",
+              "Heart Failure",
+              "Chronic Kidney Disease",
+              "Asthma",
+              "Arthritis",
+              "Depression",
+              "Anxiety",
+              "Other chronic condition",
+              "None of the above"
+            ],
+            "required": true,
+            "follow_up": {
+              "if_selected": ["Type 1 Diabetes", "Type 2 Diabetes"],
+              "ask": "How well controlled is your diabetes? (A1C level if known)"
+            }
+          },
+          {
+            "id": "emergency_symptoms",
+            "text": "Are you experiencing any of these symptoms RIGHT NOW?",
+            "type": "multiple_choice", 
+            "options": [
+              "Chest pain or pressure",
+              "Severe difficulty breathing",
+              "Signs of stroke (face drooping, arm weakness, speech difficulty)",
+              "Severe allergic reaction",
+              "Thoughts of hurting yourself or others",
+              "Severe bleeding",
+              "Loss of consciousness",
+              "None of the above"
+            ],
+            "required": true,
+            "critical": true,
+            "emergency_action": "immediate_referral"
+          },
+          {
+            "id": "recent_hospitalization",
+            "text": "Have you been hospitalized or visited the emergency room in the past 6 months?",
+            "type": "boolean",
+            "follow_up": {
+              "if_yes": "What was the reason for your hospital visit?"
+            }
+          },
+          {
+            "id": "medication_list",
+            "text": "Please list any medications you currently take (or type 'none')",
+            "type": "text",
+            "required": false
+          }
+        ]
+      },
+      
+      "insurance_coverage": {
+        "priority": "high",
+        "questions": [
+          {
+            "id": "insurance_status",
+            "text": "Do you currently have health insurance?",
+            "type": "single_choice",
+            "options": [
+              "Yes, through my employer",
+              "Yes, I buy my own insurance",
+              "Yes, Medicare",
+              "Yes, Medicaid", 
+              "Yes, other government program",
+              "No, I don't have insurance",
+              "I'm not sure"
+            ],
+            "required": true
+          },
+          {
+            "id": "insurance_satisfaction",
+            "text": "How satisfied are you with your current insurance coverage?",
+            "type": "single_choice",
+            "options": [
+              "Very satisfied",
+              "Satisfied", 
+              "Neutral",
+              "Dissatisfied",
+              "Very dissatisfied",
+              "Not applicable"
+            ],
+            "required": false,
+            "depends_on": {"insurance_status": "has_insurance"}
+          }
+        ]
+      },
+      
+      "technology_access": {
+        "priority": "medium", 
+        "questions": [
+          {
+            "id": "device_access",
+            "text": "Which of these devices do you have access to? (Select all that apply)",
+            "type": "multiple_choice",
+            "options": [
+              "Smartphone (iPhone, Android)",
+              "Tablet (iPad, Android tablet)",
+              "Computer or laptop",
+              "Basic cell phone (not smartphone)",
+              "None of the above"
+            ],
+            "required": true
+          },
+          {
+            "id": "internet_access",
+            "text": "Do you have internet access at home?",
+            "type": "single_choice",
+            "options": [
+              "Yes, reliable high-speed internet",
+              "Yes, but it's slow or unreliable",
+              "Only through my phone's data plan",
+              "No internet access at home",
+              "I'm not sure"
+            ],
+            "required": true
+          },
+          {
+            "id": "tech_comfort",
+            "text": "How comfortable are you using technology for healthcare?",
+            "type": "single_choice",
+            "options": [
+              "Very comfortable",
+              "Somewhat comfortable", 
+              "Neutral",
+              "Somewhat uncomfortable",
+              "Very uncomfortable"
+            ],
+            "required": false
+          }
+        ]
+      },
+      
+      "financial_situation": {
+        "priority": "medium",
+        "questions": [
+          {
+            "id": "household_income",
+            "text": "What is your approximate annual household income? (This helps determine assistance eligibility)",
+            "type": "single_choice",
+            "options": [
+              "Under $15,000",
+              "$15,000 - $25,000",
+              "$25,000 - $35,000", 
+              "$35,000 - $50,000",
+              "$50,000 - $75,000",
+              "$75,000 - $100,000",
+              "Over $100,000",
+              "Prefer not to answer"
+            ],
+            "required": false,
+            "sensitive": true
+          },
+          {
+            "id": "medication_costs",
+            "text": "Do you have trouble affording your medications?",
+            "type": "single_choice",
+            "options": [
+              "Never",
+              "Rarely",
+              "Sometimes", 
+              "Often",
+              "Always",
+              "I don't take any medications"
+            ],
+            "required": false
+          }
+        ]
+      },
+      
+      "care_preferences": {
+        "priority": "low",
+        "questions": [
+          {
+            "id": "preferred_communication",
+            "text": "How would you prefer to receive healthcare information and updates?",
+            "type": "multiple_choice",
+            "options": [
+              "Text messages",
+              "Phone calls",
+              "Email",
+              "Mail/postal service",
+              "Patient portal/app",
+              "In-person only"
+            ],
+            "required": false
+          },
+          {
+            "id": "care_goals",
+            "text": "What are your main healthcare goals? (Select all that apply)",
+            "type": "multiple_choice",
+            "options": [
+              "Better manage my chronic condition(s)",
+              "Prevent future health problems", 
+              "Lose weight",
+              "Quit smoking/tobacco",
+              "Reduce stress",
+              "Get regular check-ups",
+              "Save money on healthcare",
+              "More convenient access to care",
+              "Better understand my medications"
+            ],
+            "required": false
+          }
+        ]
+      },
+      
+      "lifestyle_factors": {
+        "priority": "medium",
+        "questions": [
+          {
+            "id": "lifestyle_factors",
+            "text": "Which of these describes your current lifestyle? (Select all that apply)",
+            "type": "multiple_choice",
+            "options": [
+              "Sedentary lifestyle (little to no exercise)",
+              "Eat a lot of processed foods",
+              "Unhealthy diet",
+              "Stress eating",
+              "Irregular meal times",
+              "Drink sugary beverages regularly",
+              "Don't get enough sleep",
+              "High stress levels",
+              "None of the above"
+            ],
+            "required": false
+          },
+          {
+            "id": "stress_level",
+            "text": "On a scale of 1-10, how would you rate your current stress level?",
+            "type": "single_choice",
+            "options": [
+              "1 - Very low stress",
+              "2",
+              "3",
+              "4",
+              "5 - Moderate stress",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10 - Very high stress"
+            ],
+            "required": false
+          }
+        ]
+      }
+    },
+    
+    "question_flow_logic": {
+      "emergency_first": {
+        "always_ask_first": ["emergency_symptoms"],
+        "stop_if_emergency": true
+      },
+      "service_specific": {
+        "rpm": {
+          "required_questions": ["chronic_conditions", "device_access", "internet_access", "insurance_status"],
+          "optional_questions": ["recent_hospitalization", "medication_list"]
+        },
+        "telehealth": {
+          "required_questions": ["state_residence", "device_access", "internet_access"], 
+          "optional_questions": ["insurance_status", "tech_comfort"]
+        },
+        "insurance": {
+          "required_questions": ["insurance_status", "state_residence", "household_income"],
+          "optional_questions": ["insurance_satisfaction", "medication_costs"]
+        },
+        "wellness": {
+          "required_questions": ["age", "chronic_conditions", "care_goals"],
+          "optional_questions": ["lifestyle_factors", "stress_level", "medication_costs"]
+        }
+      },
+      "adaptive_questioning": {
+        "ask_one_at_a_time": true,
+        "prioritize_by_service_interest": true,
+        "skip_if_already_answered": true,
+        "follow_up_on_positive_responses": true
+      }
+    },
+    
+    "validation_rules": {
+      "required_field_validation": true,
+      "age_range_validation": true,
+      "emergency_symptom_alerts": true,
+      "skip_logic_validation": true
+    }
+  }
