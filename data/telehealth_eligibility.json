@@ -1,0 +1,180 @@
+// rules/telehealth_eligibility.json
+{
+    "rule_id": "telehealth_virtual_care_v1_5",
+    "service": "Telehealth / Virtual Primary Care",
+    "version": "1.5.0",
+    "effective_date": "2025-01-10",
+    "description": "Telehealth eligibility for virtual primary care services",
+    
+    "requirements": {
+      "age": {
+        "required": true,
+        "min_value": 2,
+        "question": "What is your age? (Telehealth available for patients 2 years and older)"
+      },
+      "state_licensing": {
+        "required": true,
+        "type": "contains",
+        "values": [
+          "CA", "NY", "TX", "FL", "IL", "PA", "OH", "GA", "NC", "MI",
+          "NJ", "VA", "WA", "AZ", "MA", "TN", "IN", "MO", "MD", "WI",
+          "CO", "MN", "SC", "AL", "LA", "KY", "OR", "OK", "CT", "UT",
+          "IA", "NV", "AR", "MS", "KS", "NM", "NE", "ID", "WV", "HI",
+          "NH", "ME", "MT", "RI", "DE", "SD", "ND", "AK", "VT", "WY"
+        ],
+        "question": "What state do you reside in?",
+        "legal_requirement": true,
+        "note": "Provider must be licensed in patient's state"
+      },
+      "device_capability": {
+        "required": true,
+        "type": "contains_any",
+        "values": ["smartphone", "tablet", "computer", "laptop", "video capability"],
+        "question": "Do you have access to a device with video calling capability (smartphone, tablet, or computer with camera)?"
+      },
+      "internet_connectivity": {
+        "required": true,
+        "type": "boolean",
+        "question": "Do you have reliable internet access for video calls?"
+      },
+      "insurance_coverage": {
+        "required": false,
+        "type": "boolean",
+        "question": "Do you have health insurance? (Not required - we offer self-pay options)",
+        "note": "Most insurance plans now cover telehealth services"
+      }
+    },
+    
+    "exclusion_criteria": {
+      "emergency_conditions": {
+        "type": "contains_any",
+        "values": [
+          "chest pain", "heart attack symptoms",
+          "stroke symptoms", "severe headache with vision changes",
+          "difficulty breathing", "severe shortness of breath",
+          "severe allergic reaction", "anaphylaxis",
+          "severe bleeding", "major trauma",
+          "loss of consciousness", "severe confusion",
+          "severe abdominal pain", "signs of appendicitis",
+          "severe burns", "eye injuries",
+          "broken bones", "dislocated joints"
+        ],
+        "action": "emergency_referral",
+        "message": "These symptoms require immediate in-person medical attention. Please visit an emergency room or call 911."
+      },
+      "controlled_substance_requests": {
+        "type": "contains_any",
+        "values": [
+          "opioids", "narcotic pain medication",
+          "controlled substances", "DEA schedule II",
+          "oxycodone", "morphine", "fentanyl", "adderall"
+        ],
+        "action": "in_person_requirement",
+        "message": "Initial prescriptions for controlled substances require an in-person visit per federal regulations."
+      },
+      "physical_examination_required": {
+        "type": "contains_any",
+        "values": [
+          "physical exam", "lumps or masses",
+          "skin cancer screening", "mole changes",
+          "joint problems", "orthopedic issues",
+          "abdominal pain", "pelvic exam needed"
+        ],
+        "action": "in_person_referral",
+        "message": "This condition requires a hands-on physical examination. We can refer you to a local provider."
+      }
+    },
+    
+    "appropriate_conditions": [
+      "Upper respiratory infections",
+      "Urinary tract infections", 
+      "Skin conditions and rashes",
+      "Medication refills and management",
+      "Mental health consultations",
+      "Chronic disease follow-ups",
+      "Preventive care consultations",
+      "Lab result reviews",
+      "Prescription adjustments",
+      "Health education and counseling",
+      "Minor injuries (cuts, sprains)",
+      "Allergies and allergy management",
+      "Sleep disorders",
+      "Weight management",
+      "Smoking cessation",
+      "Birth control consultations",
+      "Routine check-ups"
+    ],
+    
+    "appointment_types": {
+      "urgent_care": {
+        "availability": "same_day",
+        "duration": "15-20 minutes",
+        "conditions": ["infections", "minor injuries", "acute symptoms"]
+      },
+      "routine_consultation": {
+        "availability": "within_3_days",
+        "duration": "20-30 minutes", 
+        "conditions": ["medication refills", "chronic disease management", "preventive care"]
+      },
+      "mental_health": {
+        "availability": "within_1_week",
+        "duration": "45-60 minutes",
+        "conditions": ["anxiety", "depression", "stress management", "counseling"]
+      },
+      "specialist_consultation": {
+        "availability": "within_2_weeks",
+        "duration": "30-45 minutes",
+        "conditions": ["dermatology", "endocrinology", "cardiology follow-up"]
+      }
+    },
+    
+    "technical_requirements": {
+      "minimum_internet_speed": "1 Mbps download, 1 Mbps upload",
+      "supported_browsers": ["Chrome", "Safari", "Firefox", "Edge"],
+      "mobile_apps": ["iOS 12+", "Android 8+"],
+      "audio_required": true,
+      "video_required": true,
+      "file_sharing": "supported for sharing photos, documents"
+    },
+    
+    "prescription_capabilities": {
+      "can_prescribe": [
+        "antibiotics", "antifungals", "antihistamines",
+        "blood pressure medications", "diabetes medications",
+        "mental health medications", "birth control",
+        "topical medications", "eye drops", "inhalers"
+      ],
+      "cannot_prescribe": [
+        "controlled substances (initial prescriptions)",
+        "DEA Schedule II medications",
+        "certain pain medications (opioids)"
+      ],
+      "pharmacy_integration": true,
+      "electronic_prescribing": true
+    },
+    
+    "pricing": {
+      "urgent_care_visit": 75,
+      "routine_consultation": 65,
+      "mental_health_session": 120,
+      "specialist_consultation": 150,
+      "insurance_accepted": true,
+      "self_pay_discount": 0.2
+    },
+    
+    "follow_up_care": {
+      "included_follow_up": "48 hours post-visit",
+      "care_coordination": "with primary care provider",
+      "referral_network": "local providers and specialists",
+      "emergency_support": "24/7 nurse hotline"
+    },
+    
+    "fallback_options": [
+      "In-person urgent care referral",
+      "Emergency room for urgent conditions", 
+      "Local primary care provider referral",
+      "Specialist referral for complex conditions",
+      "Community health center resources",
+      "Pharmacy consultation for minor issues"
+    ]
+  }

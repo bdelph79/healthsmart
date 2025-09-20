@@ -1,0 +1,183 @@
+// rules/rpm_eligibility.json
+{
+    "rule_id": "rpm_chronic_conditions_v2_1",
+    "service": "Remote Patient Monitoring",
+    "version": "2.1.0",
+    "effective_date": "2025-01-15",
+    "clinical_owner": "Dr. Sarah Johnson, Chief Medical Officer",
+    "description": "Comprehensive RPM eligibility for chronic disease management",
+    
+    "requirements": {
+      "age": {
+        "required": true,
+        "min_value": 18,
+        "question": "What is your age?",
+        "validation": "Must be 18 or older for adult RPM programs"
+      },
+      "chronic_conditions": {
+        "required": true,
+        "type": "contains_any",
+        "values": [
+          "diabetes", "type 1 diabetes", "type 2 diabetes",
+          "hypertension", "high blood pressure",
+          "copd", "chronic obstructive pulmonary disease",
+          "heart failure", "congestive heart failure", "chf",
+          "chronic kidney disease", "ckd",
+          "asthma"
+        ],
+        "question": "Do you have any chronic health conditions like diabetes, high blood pressure, COPD, heart failure, kidney disease, or asthma?",
+        "clinical_rationale": "RPM most effective for ongoing chronic disease management"
+      },
+      "insurance_coverage": {
+        "required": true,
+        "type": "boolean",
+        "question": "Do you currently have health insurance that covers medical devices and remote monitoring?",
+        "followup_questions": {
+          "medicare": "Do you have Medicare coverage?",
+          "private": "Is your insurance through an employer or private plan?",
+          "medicaid": "Do you have Medicaid coverage?"
+        }
+      },
+      "device_access": {
+        "required": true,
+        "type": "boolean",
+        "question": "Do you have access to a smartphone, tablet, or computer with internet connectivity?",
+        "clarification": "RPM requires a connected device to transmit health data"
+      },
+      "connectivity": {
+        "required": true,
+        "type": "contains_any",
+        "values": ["wifi", "internet", "cellular data", "broadband"],
+        "question": "Do you have reliable internet access at home (Wi-Fi, cellular data, or broadband)?",
+        "technical_requirement": true
+      },
+      "consent_monitoring": {
+        "required": true,
+        "type": "boolean",
+        "question": "Are you comfortable with sharing your health data with your care team for remote monitoring?",
+        "legal_requirement": true,
+        "hipaa_related": true
+      },
+      "consent_data_sharing": {
+        "required": true,
+        "type": "boolean", 
+        "question": "Do you consent to having your health information shared between your doctors and care coordinators?",
+        "legal_requirement": true
+      }
+    },
+    
+    "enhanced_criteria": {
+      "recent_hospitalization": {
+        "required": false,
+        "type": "boolean",
+        "weight": 2.0,
+        "question": "Have you been hospitalized in the past 6 months?",
+        "benefit": "Higher priority for patients with recent hospitalizations"
+      },
+      "medication_adherence_issues": {
+        "required": false,
+        "type": "boolean",
+        "weight": 1.5,
+        "question": "Do you sometimes forget to take your medications or have trouble managing multiple medications?"
+      },
+      "emergency_room_visits": {
+        "required": false,
+        "type": "boolean",
+        "weight": 1.5,
+        "question": "Have you visited the emergency room more than once in the past year for your chronic condition?"
+      }
+    },
+    
+    "exclusion_criteria": {
+      "emergency_symptoms": {
+        "type": "contains_any",
+        "values": [
+          "chest pain", "severe chest pain",
+          "difficulty breathing", "can't breathe",
+          "severe allergic reaction",
+          "loss of consciousness", "passed out",
+          "severe bleeding",
+          "stroke symptoms", "face drooping", "arm weakness"
+        ],
+        "action": "immediate_emergency_referral",
+        "message": "Please seek immediate medical attention or call 911"
+      },
+      "terminal_illness": {
+        "type": "boolean",
+        "values": [true],
+        "action": "palliative_care_referral",
+        "message": "We recommend focusing on comfort care and palliative services"
+      },
+      "cognitive_impairment": {
+        "type": "boolean",
+        "values": [true],
+        "requires_caregiver": true,
+        "question": "Do you have a caregiver who can help with technology and monitoring?"
+      }
+    },
+    
+    "device_recommendations": {
+      "diabetes": ["glucose meter", "continuous glucose monitor", "smart scale"],
+      "hypertension": ["blood pressure cuff", "smart scale", "heart rate monitor"],
+      "copd": ["pulse oximeter", "peak flow meter", "smart scale"],
+      "heart_failure": ["smart scale", "blood pressure cuff", "heart rate monitor"],
+      "chronic_kidney_disease": ["blood pressure cuff", "smart scale"],
+      "asthma": ["peak flow meter", "pulse oximeter"]
+    },
+    
+    "monitoring_protocols": {
+      "diabetes": {
+        "frequency": "daily",
+        "measurements": ["glucose_readings", "weight", "blood_pressure"],
+        "alert_thresholds": {
+          "glucose_low": 70,
+          "glucose_high": 250,
+          "weight_gain_24h": 3
+        }
+      },
+      "hypertension": {
+        "frequency": "daily", 
+        "measurements": ["blood_pressure", "weight", "heart_rate"],
+        "alert_thresholds": {
+          "systolic_high": 180,
+          "diastolic_high": 110,
+          "weight_gain_24h": 3
+        }
+      },
+      "heart_failure": {
+        "frequency": "daily",
+        "measurements": ["weight", "blood_pressure", "symptoms", "activity_tolerance"],
+        "alert_thresholds": {
+          "weight_gain_24h": 3,
+          "weight_gain_3day": 5,
+          "systolic_low": 90
+        }
+      }
+    },
+    
+    "enrollment_timeline": {
+      "eligibility_confirmation": "1-2 business days",
+      "device_selection": "1 business day", 
+      "patient_education": "30-60 minutes",
+      "baseline_establishment": "1 week",
+      "active_monitoring": "ongoing"
+    },
+    
+    "fallback_options": [
+      "Wellness education and self-management training",
+      "Preventive care coordination",
+      "Pharmacy savings and medication assistance",
+      "Manual health tracking with paper logs",
+      "Community health worker support",
+      "Telehealth consultations for routine care"
+    ],
+    
+    "success_metrics": [
+      "Patient adherence to monitoring protocol",
+      "Clinical outcome improvements", 
+      "Reduction in emergency room visits",
+      "Medication adherence improvement",
+      "Patient satisfaction scores",
+      "Care team efficiency metrics"
+    ]
+  }

@@ -194,7 +194,7 @@ class DynamicRulesEngine:
         age_match = re.search(r'age.*?(\d+)', criteria_lower)
         if age_match:
             criteria_age = int(age_match.group(1))
-            patient_age = responses.get('age', 0)
+            patient_age = self._get_patient_age(responses)
             
             if 'older' in criteria_lower or '≥' in criteria or '>=' in criteria:
                 return (patient_age >= criteria_age) == positive
@@ -212,6 +212,30 @@ class DynamicRulesEngine:
             return has_insurance == positive
         
         return False
+    
+    def _get_patient_age(self, responses: Dict) -> int:
+        """Get patient age from various possible fields."""
+        # Try direct age field first
+        if 'age' in responses and responses['age'] is not None and responses['age'] != '':
+            try:
+                return int(responses['age'])
+            except (ValueError, TypeError):
+                pass
+        
+        # Try birth year fields
+        birth_year_fields = ['birth_year', 'year_of_birth', 'birthyear']
+        for field in birth_year_fields:
+            if field in responses and responses[field] is not None and responses[field] != '':
+                try:
+                    birth_year = int(responses[field])
+                    current_year = 2024  # Could be made configurable
+                    age = current_year - birth_year
+                    if 0 <= age <= 150:  # Reasonable age range
+                        return age
+                except (ValueError, TypeError):
+                    continue
+        
+        return 0  # Default if no valid age found
     
     def _generate_reasoning(self, qualifying_rules: List[Dict], responses: Dict) -> str:
         """Generate human-readable reasoning for eligibility decision."""
@@ -231,7 +255,7 @@ class DynamicRulesEngine:
         suggested = []
         
         # If no age provided, ask for it
-        if 'age' not in responses:
+        if not self._has_age_info(responses):
             suggested.append("What is your age?")
         
         # If chronic conditions unclear, ask specifically
@@ -248,13 +272,23 @@ class DynamicRulesEngine:
         
         return suggested[:1]  # Limit to 1 question to avoid overwhelming
     
+    def _has_age_info(self, context: Dict) -> bool:
+        """Check if age information is available in any form."""
+        # Check for direct age field
+        if 'age' in context and context['age'] is not None and context['age'] != '':
+            return True
+        
+        # Check for birth year fields
+        birth_year_fields = ['birth_year', 'year_of_birth', 'birthyear']
+        for field in birth_year_fields:
+            if field in context and context[field] is not None and context[field] != '':
+                return True
+        
+        return False
+    
     def identify_missing_critical_data(self, context: Dict) -> List[str]:
         """Identify what critical data is missing from patient context."""
         missing = []
-        
-        # Ensure context is a dictionary
-        if not isinstance(context, dict):
-            return ['patient information']
         
         # Critical data points for all services
         critical_fields = {
@@ -267,8 +301,14 @@ class DynamicRulesEngine:
             'household_income': 'household income'
         }
         
+        # Check if age is provided (including birth year)
+        has_age = self._has_age_info(context)
+        
         for field, description in critical_fields.items():
-            if field not in context or context[field] is None or context[field] == '':
+            if field == 'age':
+                if not has_age:
+                    missing.append(description)
+            elif field not in context or context[field] is None or context[field] == '':
                 missing.append(description)
         
         return missing
@@ -277,10 +317,6 @@ class DynamicRulesEngine:
         """Generate next questions based on current context and missing data."""
         # Get all available questions
         all_questions = self.generate_assessment_questions()
-        
-        # Ensure context is a dictionary
-        if not isinstance(context, dict):
-            context = {}
         
         # Identify missing critical data
         missing_data = self.identify_missing_critical_data(context)
@@ -294,7 +330,7 @@ class DynamicRulesEngine:
             # Check if question addresses missing data
             is_relevant = False
             for missing in missing_data:
-                if any(keyword in question_text for keyword in missing.split()):
+                if isinstance(missing, str) and any(keyword in question_text for keyword in missing.split()):
                     is_relevant = True
                     break
             
@@ -336,7 +372,7 @@ class DynamicRulesEngine:
             
             # Check if question addresses high priority missing data
             if any(keyword in question_text for keyword in high_priority_keywords):
-                if any(missing in question_text for missing in missing_data):
+                if any(isinstance(missing, str) and missing in question_text for missing in missing_data):
                     priority_questions.append(question['question'])
         
         # If we have high priority questions, return them
@@ -349,14 +385,6 @@ class DynamicRulesEngine:
 # Tool functions for the ADK agents
 def load_dynamic_rules() -> str:
     """Tool to load CSV rules and return summary."""
-    import sys
-    from pathlib import Path
-    
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
     from config import CSV_PATHS
     csv_paths = CSV_PATHS
     
@@ -390,14 +418,6 @@ def assess_eligibility_dynamically(patient_data: str) -> str:
     except:
         return "❌ Error: Patient data must be in JSON format"
     
-    import sys
-    from pathlib import Path
-    
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
     from config import CSV_PATHS
     csv_paths = CSV_PATHS
     
@@ -424,14 +444,6 @@ def assess_eligibility_dynamically(patient_data: str) -> str:
 
 def get_next_assessment_questions(current_responses: str, service_type: str = None) -> str:
     """Tool to get the next questions to ask based on current responses and service type."""
-    import sys
-    from pathlib import Path
-    
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
     from config import CSV_PATHS
     csv_paths = CSV_PATHS
     
@@ -453,14 +465,6 @@ def get_next_assessment_questions(current_responses: str, service_type: str = No
 
 def assess_service_specific_eligibility(service_type: str, patient_responses: str) -> str:
     """Tool to assess eligibility for a specific service using CSV rules."""
-    import sys
-    from pathlib import Path
-    
-    # Add project root to path if not already there
-    project_root = Path(__file__).parent.parent
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    
     from config import CSV_PATHS
     csv_paths = CSV_PATHS
     
@@ -507,3 +511,4 @@ if __name__ == "__main__":
     }
     
     print(assess_eligibility_dynamically(json.dumps(sample_patient)))
+

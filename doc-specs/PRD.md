@@ -337,7 +337,7 @@ async def run_basic_app():
 - **Session State Management**: Use simple in-memory storage initially
 
 ### User Experience Risks
-- **Overwhelming Questions**: Limit to 2 questions at a time
+- **Overwhelming Questions**: Limit to 1 question at a time
 - **Confusing Service Options**: Use clear, simple descriptions
 - **Poor Error Handling**: Implement comprehensive fallbacks
 

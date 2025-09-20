@@ -4,14 +4,20 @@
 import asyncio
 import json
 import os
+import sys
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 
 from google.adk.agents import Agent
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+# Add the project root to Python path for imports
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
 from config import GOOGLE_CLOUD_PROJECT, APP_NAME, GEMINI_API_KEY
 from .rules_engine import load_dynamic_rules, assess_eligibility_dynamically, get_next_assessment_questions

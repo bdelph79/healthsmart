@@ -1,4 +1,4 @@
-# CSV Rules Engine Integration - Dynamic Rule Loading
+# CSV Rules Engine Integration - Enhanced Version
 # This module loads your CSV files and creates intelligent routing logic
 
 import pandas as pd
@@ -89,6 +89,138 @@ class DynamicRulesEngine:
                 fallback_options=[]
             )
         
+        # Special handling for RPM service with improved logic
+        if "Remote Patient Monitoring" in service or "RPM" in service:
+            return self._evaluate_rpm_eligibility_enhanced(patient_responses, service_rules)
+        
+        # Default evaluation for other services
+        return self._evaluate_generic_eligibility(patient_responses, service, service_rules)
+    
+    def _evaluate_rpm_eligibility_enhanced(self, patient_responses: Dict, service_rules: List[Dict]) -> EligibilityResult:
+        """Enhanced RPM eligibility evaluation with improved logic."""
+        
+        # Extract key information from patient responses
+        age = patient_responses.get('age', 0)
+        chronic_conditions = str(patient_responses.get('chronic_conditions', '')).lower()
+        has_insurance = patient_responses.get('has_insurance', False)
+        recent_hospital = patient_responses.get('recent_hospitalization', False)
+        device_access = patient_responses.get('device_access', False)
+        consent = patient_responses.get('consent', False)
+        
+        # Check for chronic conditions
+        has_chronic_condition = any(
+            condition in chronic_conditions
+            for condition in ['diabetes', 'hypertension', 'high blood pressure', 'copd', 'heart', 'asthma', 'kidney']
+        )
+        
+        # Calculate inclusion score (what they HAVE)
+        inclusion_score = 0
+        inclusion_reasons = []
+        
+        if has_chronic_condition:
+            inclusion_score += 1
+            inclusion_reasons.append("✅ Has chronic condition")
+        
+        if has_insurance:
+            inclusion_score += 1
+            inclusion_reasons.append("✅ Has insurance coverage")
+        
+        if recent_hospital:
+            inclusion_score += 1
+            inclusion_reasons.append("✅ Recent hospitalization (helps with eligibility)")
+        
+        if device_access:
+            inclusion_score += 1
+            inclusion_reasons.append("✅ Has device access")
+        
+        if consent:
+            inclusion_score += 1
+            inclusion_reasons.append("✅ Consents to data sharing")
+        
+        # Check for explicit exclusions (what DISQUALIFIES them)
+        exclusion_factors = 0
+        exclusion_reasons = []
+        
+        if not has_chronic_condition:
+            exclusion_factors += 1
+            exclusion_reasons.append("❌ No chronic condition")
+        
+        if not has_insurance:
+            exclusion_factors += 1
+            exclusion_reasons.append("❌ No insurance coverage")
+        
+        # Determine qualification - require ALL criteria for RPM
+        # Qualify only if they have chronic condition + insurance + device access + consent
+        qualified = has_chronic_condition and has_insurance and device_access and consent
+        
+        # Calculate confidence (0-1 scale)
+        max_possible = 5  # chronic + insurance + hospital + device + consent
+        confidence = inclusion_score / max_possible
+        
+        # Generate reasoning
+        if inclusion_reasons:
+            reasoning = " | ".join(inclusion_reasons)
+        else:
+            reasoning = "❓ Need more information to assess eligibility"
+        
+        # Generate next questions based on what's missing
+        next_questions = self._generate_rpm_questions_enhanced(patient_responses, inclusion_score)
+        
+        # Get fallback options
+        fallback_options = ["Wellness education", "Preventive care", "Pharmacy savings", "Manual tracking"]
+        
+        return EligibilityResult(
+            service="Remote Patient Monitoring (RPM)",
+            qualified=qualified,
+            confidence=confidence,
+            reasoning=reasoning,
+            next_questions=next_questions,
+            fallback_options=fallback_options
+        )
+    
+    def _generate_rpm_questions_enhanced(self, patient_responses: Dict, inclusion_score: int) -> List[str]:
+        """Generate specific questions for RPM eligibility in correct priority order with strict validation."""
+        
+        # Check ALL required criteria before allowing eligibility assessment
+        required_criteria = ['chronic_conditions', 'has_insurance', 'device_access', 'consent']
+        missing_criteria = []
+        
+        # Check chronic conditions
+        has_chronic_condition = any(
+            condition in str(patient_responses.get('chronic_conditions', '')).lower()
+            for condition in ['diabetes', 'hypertension', 'high blood pressure', 'copd', 'heart', 'asthma', 'kidney']
+        )
+        if not has_chronic_condition:
+            missing_criteria.append('chronic_conditions')
+        
+        # Check insurance
+        if not patient_responses.get('has_insurance', False):
+            missing_criteria.append('has_insurance')
+        
+        # Check device access
+        if not patient_responses.get('device_access', False):
+            missing_criteria.append('device_access')
+        
+        # Check consent
+        if not patient_responses.get('consent', False):
+            missing_criteria.append('consent')
+        
+        # Force the LLM to ask about missing criteria in strict order
+        if missing_criteria:
+            if 'chronic_conditions' in missing_criteria:
+                return ["Do you have any chronic health conditions like diabetes, high blood pressure, or heart disease?"]
+            elif 'has_insurance' in missing_criteria:
+                return ["Do you currently have health insurance coverage?"]
+            elif 'device_access' in missing_criteria:
+                return ["Do you have access to a smartphone, tablet, or Wi-Fi at home for health monitoring?"]
+            elif 'consent' in missing_criteria:
+                return ["Are you comfortable with sharing your health data for remote monitoring purposes?"]
+        
+        # Only allow eligibility assessment when ALL criteria are met
+        return ["Based on your information, you appear to qualify for RPM. Would you like me to connect you with a specialist to discuss enrollment?"]
+    
+    def _evaluate_generic_eligibility(self, patient_responses: Dict, service: str, service_rules: List[Dict]) -> EligibilityResult:
+        """Generic eligibility evaluation for non-RPM services."""
         total_confidence = 0.0
         qualifying_rules = []
         all_fallbacks = set()
@@ -98,9 +230,7 @@ class DynamicRulesEngine:
             exclusion = rule.get('Exclusion Criteria', '')
             
             # Calculate rule match confidence
-            rule_confidence = self._evaluate_rule_match(
-                patient_responses, inclusion, exclusion
-            )
+            rule_confidence = self._evaluate_rule_match(patient_responses, inclusion, exclusion)
             
             if rule_confidence > 0.3:  # Threshold for qualification
                 qualifying_rules.append(rule)
@@ -126,22 +256,6 @@ class DynamicRulesEngine:
             next_questions=next_questions,
             fallback_options=list(all_fallbacks)
         )
-    
-    def assess_service_specific_eligibility(self, service_type: str, context: Dict) -> EligibilityResult:
-        """Assess eligibility for specific service using CSV rules."""
-        # Normalize service type
-        service_mapping = {
-            'rpm': 'Remote Patient Monitoring',
-            'remote patient monitoring': 'Remote Patient Monitoring',
-            'telehealth': 'Telehealth',
-            'virtual primary care': 'Telehealth',
-            'insurance': 'Insurance',
-            'insurance enrollment': 'Insurance'
-        }
-        
-        normalized_service = service_mapping.get(service_type.lower(), service_type)
-        
-        return self.evaluate_patient_against_rules(context, normalized_service)
     
     def _evaluate_rule_match(self, patient_responses: Dict, inclusion: str, exclusion: str) -> float:
         """
@@ -177,7 +291,7 @@ class DynamicRulesEngine:
         
         # Check for common health conditions
         health_conditions = [
-            'diabetes', 'hypertension', 'copd', 'asthma', 'heart failure', 
+            'diabetes', 'hypertension', 'high blood pressure', 'copd', 'asthma', 'heart failure', 
             'kidney disease', 'ckd', 'chronic condition'
         ]
         
@@ -207,9 +321,19 @@ class DynamicRulesEngine:
             return recent_hospital == positive
         
         # Check for insurance status
-        if 'insurance' in criteria_lower or 'medicare' in criteria_lower:
+        if 'insurance' in criteria_lower or 'medicare' in criteria_lower or 'medicaid' in criteria_lower:
             has_insurance = responses.get('has_insurance', False)
             return has_insurance == positive
+        
+        # Check for device access
+        if 'device' in criteria_lower or 'connectivity' in criteria_lower:
+            device_access = responses.get('device_access', False)
+            return device_access == positive
+        
+        # Check for consent
+        if 'consent' in criteria_lower:
+            consent = responses.get('consent', False)
+            return consent == positive
         
         return False
     
@@ -262,7 +386,8 @@ class DynamicRulesEngine:
             'chronic_conditions': 'chronic health conditions',
             'recent_hospitalization': 'recent hospitalization history',
             'has_insurance': 'insurance status',
-            'tech_comfortable': 'technology comfort level',
+            'device_access': 'device access',
+            'consent': 'data sharing consent',
             'state': 'state of residence',
             'household_income': 'household income'
         }
@@ -281,6 +406,10 @@ class DynamicRulesEngine:
         # Ensure context is a dictionary
         if not isinstance(context, dict):
             context = {}
+        
+        # Special handling for RPM service
+        if service_type and service_type.lower() in ['rpm', 'remote patient monitoring']:
+            return self._generate_rpm_questions_enhanced(context, 0)
         
         # Identify missing critical data
         missing_data = self.identify_missing_critical_data(context)
@@ -345,6 +474,10 @@ class DynamicRulesEngine:
         
         # Otherwise return general questions
         return [q['question'] for q in questions[:1]]
+    
+    def assess_service_specific_eligibility(self, service_type: str, patient_responses: Dict) -> EligibilityResult:
+        """Assess eligibility for a specific service using CSV rules."""
+        return self.evaluate_patient_against_rules(patient_responses, service_type)
 
 # Tool functions for the ADK agents
 def load_dynamic_rules() -> str:
@@ -370,14 +503,14 @@ def load_dynamic_rules() -> str:
     questions_count = len(rules_engine.generate_assessment_questions())
     
     summary = f"""
-    📋 Dynamic Rules Engine Loaded:
+    📋 Enhanced Rules Engine Loaded:
     
     Services Available:
     {json.dumps(service_counts, indent=2)}
     
     Total Assessment Questions: {questions_count}
     
-    Ready to process patient routing decisions!
+    Ready to process patient routing decisions with improved logic!
     """
     
     return summary
@@ -499,11 +632,10 @@ if __name__ == "__main__":
     
     # Test patient assessment
     sample_patient = {
-        "age": 67,
-        "chronic_conditions": "diabetes, hypertension", 
-        "recent_hospitalization": True,
+        "age": 45,
+        "chronic_conditions": "high blood pressure", 
         "has_insurance": True,
-        "tech_comfortable": True
+        "recent_hospitalization": False
     }
     
     print(assess_eligibility_dynamically(json.dumps(sample_patient)))
