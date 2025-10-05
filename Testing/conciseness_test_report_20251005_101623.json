@@ -1,0 +1,492 @@
+{
+  "timestamp": "20251005_101623",
+  "total_tests": 25,
+  "passed": 15,
+  "pass_rate": 0.6,
+  "averages": {
+    "sentences": 5.0,
+    "bullets": 2.04,
+    "words": 67.76
+  },
+  "critical_issues": {
+    "wall_of_text": 0,
+    "excessive_bullets": 0
+  },
+  "detailed_results": [
+    {
+      "test_name": "A1: What is RPM?",
+      "message": "What is RPM?",
+      "response": "Remote Patient Monitoring helps you manage ongoing health conditions by tracking your health from home with connected devices. It's like having a health partner checking in on you 24/7, helping to prevent complications and keep you feeling your best. Would you like to see if you qualify for this program?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 50,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Remote Patient Monitoring helps you manage ongoing health conditions by tracking your health from home with connected devices. It's like having a heal..."
+      },
+      "passed": true,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A2: How does telehealth work?",
+      "message": "How does telehealth work?",
+      "response": "Telehealth lets you see a doctor from home via video. You can get prescriptions, diagnoses, and follow-up care without leaving your couch. Want to see if it's right for you?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 30,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Telehealth lets you see a doctor from home via video. You can get prescriptions, diagnoses, and follow-up care without leaving your couch. Want to see..."
+      },
+      "passed": true,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A3: Tell me about insurance",
+      "message": "Tell me about insurance enrollment",
+      "response": "I can definitely help you with insurance enrollment! This service helps you understand your health insurance options and get enrolled.\n\nTo see if you qualify, I need to ask a few questions:\n\n*   Are you a U.S. citizen or do you have eligible immigration status?\n*   Do you have a Social Security Number or Tax Identification Number?\n*   What state do you live in?",
+      "analysis": {
+        "sentences": 6,
+        "bullets": 3,
+        "words": 61,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "I can definitely help you with insurance enrollment! This service helps you understand your health insurance options and get enrolled.\n\nTo see if you ..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A4: What can you help with?",
+      "message": "What can you help me with?",
+      "response": "Hello! I can help you with several healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Programs, and Wellness Programs.\n\nIf you're experiencing emergency symptoms like chest pain or difficulty breathing, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 5,
+        "bullets": 0,
+        "words": 50,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Hello! I can help you with several healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Progra..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A5: Explain pharmacy savings",
+      "message": "Explain pharmacy savings",
+      "response": "I can help you find care, save on medicines, and connect to programs that fit your needs. Let's find the easiest way for you to save on your medicine today.\n\nWhat questions do you have about pharmacy savings?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 38,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "I can help you find care, save on medicines, and connect to programs that fit your needs. Let's find the easiest way for you to save on your medicine ..."
+      },
+      "passed": true,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A6: Wellness program info",
+      "message": "What is wellness program?",
+      "response": "The user is asking about \"wellness program\". While the initial prompt started with \"FIRST_INTERACTION:\", the subsequent part of the query is a direct question about a specific service. According to the `CRITICAL: Tool Usage Constraints for Conciseness` rule, I should answer directly in 2-3 sentences for service-specific questions and NOT call `present_available_services()` again. I will use the `get_service_specific_info` tool to get details about the \"Wellness Programs\" and then answer the user's question. Wellness programs are designed to help you live a healthier life through things like weight management, diabetes prevention, and stress reduction. They focus on proactive care to keep you feeling your best.\n\nWhat questions do you have about our wellness programs?",
+      "analysis": {
+        "sentences": 7,
+        "bullets": 0,
+        "words": 113,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "The user is asking about \"wellness program\". While the initial prompt started with \"FIRST_INTERACTION:\", the subsequent part of the query is a direct ..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A7: RPM qualification",
+      "message": "How do I qualify for RPM?",
+      "response": "To see if you qualify for Remote Patient Monitoring, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition",
+      "analysis": {
+        "sentences": 2,
+        "bullets": 7,
+        "words": 46,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": false,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "To see if you qualify for Remote Patient Monitoring, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pres..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A8: Service benefits",
+      "message": "What are the benefits of your services?",
+      "response": "Welcome to HealthSmart Assistant! I can help you find care, save on medicines, and connect to programs that fit your needs.\n\nHere are some of the services I offer:\n\n*   **Remote Patient Monitoring (RPM):** Monitor chronic conditions from home with connected devices.\n*   **Telehealth / Virtual Primary Care:** See a doctor virtually from home for prescriptions and appointments.\n*   **Insurance Enrollment:** Get help finding health insurance plans.\n*   **Pharmacy Savings Programs:** Find discounts on your prescription medications.\n*   **Wellness Programs:** Support for weight management, diabetes prevention, and stress management.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 9,
+        "bullets": 5,
+        "words": 97,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you find care, save on medicines, and connect to programs that fit your needs.\n\nHere are some of the serv..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A9: Getting started",
+      "message": "How do I get started?",
+      "response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic conditions from home\n   - Connected devices for health tracking\n   - Medicare and insurance coverage available\n\n2. \ud83d\udcbb Telehealth / Virtual Primary Care  \n   - Virtual doctor visits from home\n   - Prescription management and refills\n   - Same-day appointments available\n\n3. \ud83d\udee1\ufe0f Insurance Enrollment\n   - Help finding health insurance plans\n   - Medicare and marketplace assistance\n   - Special enrollment period support\n\n4. \ud83d\udc8a Pharmacy Savings Programs\n   - Prescription medication discounts\n   - Generic and brand name savings\n   - No insurance required\n\n5. \ud83c\udf1f Wellness Programs\n   - Weight management support\n   - Diabetes prevention programs\n   - Stress management and mental health\n\n\u26a0\ufe0f Emergency Support: If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 9,
+        "bullets": 5,
+        "words": 126,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic condition..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "A10: Multiple conditions",
+      "message": "I have diabetes and high blood pressure, can you help?",
+      "response": "It's great to connect with you! I can definitely help with your health needs, especially since you mentioned having diabetes and high blood pressure.\n\nBased on what you've shared, I think Remote Patient Monitoring (RPM) could be a great fit. RPM lets you manage conditions like diabetes and high blood pressure from home using connected devices, with support from a care team. It can also help cut down on hospital visits.\n\nWould you like to explore RPM, or perhaps another service like Telehealth or Pharmacy Savings?",
+      "analysis": {
+        "sentences": 6,
+        "bullets": 0,
+        "words": 86,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "It's great to connect with you! I can definitely help with your health needs, especially since you mentioned having diabetes and high blood pressure.\n..."
+      },
+      "passed": false,
+      "max_sentences": 3,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "B1: What is RPM? (bullets)",
+      "message": "What is RPM?",
+      "response": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring tracks your health using connected devices and helps prevent hospital visits. Would you like to see if you qualify?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 37,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring tracks your health using connected devices..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B2: How does it work?",
+      "message": "How does it work?",
+      "response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nHere are some of the ways I can assist you:\n*   **Remote Patient Monitoring (RPM):** Manage chronic conditions from home with connected devices.\n*   **Telehealth / Virtual Primary Care:** See a doctor virtually for prescriptions, diagnoses, and follow-up care.\n*   **Insurance Enrollment:** Get help finding the right health insurance plan, including Medicare and marketplace options.\n*   **Pharmacy Savings Programs:** Find discounts on your prescription medications.\n*   **Wellness Programs:** Access programs for weight management, diabetes prevention, and stress management.\n\nIf you're experiencing a medical emergency like chest pain or difficulty breathing, please call 911 immediately.\n\nWhat are your health needs today?",
+      "analysis": {
+        "sentences": 9,
+        "bullets": 5,
+        "words": 109,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nHere are some of the ways I can assist you:\n*   **Remote Patien..."
+      },
+      "passed": false,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B3: Benefits of telehealth",
+      "message": "Tell me benefits of telehealth",
+      "response": "Telehealth lets you talk to a doctor from your couch - it's that simple. You can get prescriptions, diagnoses, and follow-up care without leaving home. Would you like to see if you qualify?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 32,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Telehealth lets you talk to a doctor from your couch - it's that simple. You can get prescriptions, diagnoses, and follow-up care without leaving home..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B4: Insurance options",
+      "message": "What insurance do you accept?",
+      "response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs.\n\nTo answer your question about insurance, I can help you explore options and find plans that work for you. Do you have health insurance?\n\u2022 Medicare (Part A, Part B, or both)\n\u2022 Medicaid\n\u2022 Private insurance (through employer)\n\u2022 Private insurance (self-purchased)\n\u2022 Other government program\n\u2022 No, I don't have insurance",
+      "analysis": {
+        "sentences": 5,
+        "bullets": 6,
+        "words": 73,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": false,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrol..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 10,
+      "max_words": 200
+    },
+    {
+      "test_name": "B5: Wellness intro",
+      "message": "I'm interested in wellness",
+      "response": "Welcome to HealthSmart Assistant! I can help you with a variety of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Programs, and Wellness Programs.\n\nI understand you're interested in wellness. To help you better, could you tell me a little more about what you're looking for in a wellness program?",
+      "analysis": {
+        "sentences": 4,
+        "bullets": 0,
+        "words": 53,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with a variety of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enr..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B6: Next steps",
+      "message": "What are my next steps?",
+      "response": "Hello! Welcome to HealthSmart Assistant. I can help you with a variety of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Programs, and Wellness Programs.\n\nTo get started, please tell me a bit about what you're looking for or your health needs. If you're experiencing an emergency, please call 911 immediately.",
+      "analysis": {
+        "sentences": 5,
+        "bullets": 0,
+        "words": 54,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Hello! Welcome to HealthSmart Assistant. I can help you with a variety of healthcare services, including Remote Patient Monitoring, Telehealth, Insura..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B7: Service comparison",
+      "message": "What's the difference between RPM and telehealth?",
+      "response": "Remote Patient Monitoring (RPM) is like having a health partner checking in on you 24/7 from the comfort of home, continuously tracking your health data. Telehealth, on the other hand, lets you talk to a doctor from your couch for virtual visits and consultations. Would you like to know more about either of these, or perhaps explore if you qualify?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 60,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Remote Patient Monitoring (RPM) is like having a health partner checking in on you 24/7 from the comfort of home, continuously tracking your health da..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B8: Qualification criteria",
+      "message": "What do I need to qualify?",
+      "response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nWould you like to know more about:\n\u2022 Remote Patient Monitoring (RPM)\n\u2022 Telehealth / Virtual Primary Care\n\u2022 Insurance Enrollment\n\u2022 Pharmacy Savings Programs\n\u2022 Wellness Programs\n\nPlease tell me a little about what you're looking for, or if you're experiencing any urgent symptoms.",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 5,
+        "words": 54,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nWould you like to know more about:\n\u2022 Remote Patient Monitoring ..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B9: Program details",
+      "message": "Tell me about the program",
+      "response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic conditions from home\n   - Connected devices for health tracking\n   - Medicare and insurance coverage available\n\n2. \ud83d\udcbb Telehealth / Virtual Primary Care  \n   - Virtual doctor visits from home\n   - Prescription management and refills\n   - Same-day appointments available\n\n3. \ud83d\udee1\ufe0f Insurance Enrollment\n   - Help finding health insurance plans\n   - Medicare and marketplace assistance\n   - Special enrollment period support\n\n4. \ud83d\udc8a Pharmacy Savings Programs\n   - Prescription medication discounts\n   - Generic and brand name savings\n   - No insurance required\n\n5. \ud83c\udf1f Wellness Programs\n   - Weight management support\n   - Diabetes prevention programs\n   - Stress management and mental health\n\n\u26a0\ufe0f Emergency Support: If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 9,
+        "bullets": 5,
+        "words": 126,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic condition..."
+      },
+      "passed": false,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "B10: All services",
+      "message": "Show me all your services",
+      "response": "Welcome to HealthSmart Assistant! I can help you with a range of services like Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 4,
+        "bullets": 0,
+        "words": 38,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with a range of services like Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy S..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 20,
+      "max_words": 200
+    },
+    {
+      "test_name": "C1: Simple question",
+      "message": "What is RPM?",
+      "response": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring helps manage chronic conditions like diabetes or high blood pressure using connected devices. Medicare often covers it, and it can significantly cut down on hospital visits.\n\nTo see if you qualify, could you share your age with me?",
+      "analysis": {
+        "sentences": 4,
+        "bullets": 0,
+        "words": 56,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring helps manage chronic conditions like diabe..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "C2: Complex question",
+      "message": "I have diabetes, high blood pressure, and I'm on Medicare. What programs can help me?",
+      "response": "Perfect! It sounds like you're looking for support with managing your diabetes and high blood pressure, and you have Medicare. I can definitely help explore programs that fit your needs, especially Remote Patient Monitoring (RPM), which is great for managing chronic conditions.\n\nTo see what other programs you might qualify for, can you tell me if you have a smartphone or tablet with internet access?",
+      "analysis": {
+        "sentences": 4,
+        "bullets": 0,
+        "words": 65,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Perfect! It sounds like you're looking for support with managing your diabetes and high blood pressure, and you have Medicare. I can definitely help e..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 200
+    },
+    {
+      "test_name": "C3: How it works",
+      "message": "How does remote patient monitoring work?",
+      "response": "Remote Patient Monitoring tracks your health 24/7 from home using connected devices. Medicare covers it, and it can help prevent hospital readmissions. Want to see if you qualify?",
+      "analysis": {
+        "sentences": 3,
+        "bullets": 0,
+        "words": 28,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Remote Patient Monitoring tracks your health 24/7 from home using connected devices. Medicare covers it, and it can help prevent hospital readmissions..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "C4: Costs and coverage",
+      "message": "How much does it cost and is it covered?",
+      "response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   **\ud83e\ude7a Remote Patient Monitoring (RPM)**\n    *   Monitor chronic conditions from home\n    *   Medicare and insurance coverage available\n*   **\ud83d\udcbb Telehealth / Virtual Primary Care**\n    *   Virtual doctor visits from home\n    *   Prescription management and refills\n*   **\ud83d\udee1\ufe0f Insurance Enrollment**\n    *   Help finding health insurance plans\n    *   Medicare and marketplace assistance\n*   **\ud83d\udc8a Pharmacy Savings Programs**\n    *   Prescription medication discounts\n    *   No insurance required\n*   **\ud83c\udf1f Wellness Programs**\n    *   Weight management support\n    *   Diabetes prevention programs\n\nTo help you better with cost and coverage, could you tell me which service you're interested in, or about your health needs?",
+      "analysis": {
+        "sentences": 2,
+        "bullets": 5,
+        "words": 90,
+        "meets_sentence_limit": true,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   **\ud83e\ude7a Remote Patient Monitoring (RPM)**\n    *   Monitor chronic c..."
+      },
+      "passed": true,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 150
+    },
+    {
+      "test_name": "C5: Multiple services",
+      "message": "Tell me about all your programs",
+      "response": "Welcome to HealthSmart Assistant! I can help you with these healthcare services:\n\n1.  \ud83e\ude7a Remote Patient Monitoring (RPM): Monitor chronic conditions from home with connected devices. Medicare and other insurance coverage may be available.\n2.  \ud83d\udcbb Telehealth / Virtual Primary Care: See a doctor virtually for prescriptions, refills, and same-day appointments from home.\n3.  \ud83d\udee1\ufe0f Insurance Enrollment: Get help finding health insurance, including Medicare and marketplace plans, with special enrollment period support.\n4.  \ud83d\udc8a Pharmacy Savings Programs: Find discounts on prescriptions, even without insurance.\n5.  \ud83c\udf1f Wellness Programs: Access support for weight management, diabetes prevention, and stress management.\n\nIf you're experiencing a medical emergency like chest pain or difficulty breathing, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "sentences": 11,
+        "bullets": 5,
+        "words": 122,
+        "meets_sentence_limit": false,
+        "meets_bullet_limit": true,
+        "meets_word_limit": true,
+        "is_wall_of_text": false,
+        "preview": "Welcome to HealthSmart Assistant! I can help you with these healthcare services:\n\n1.  \ud83e\ude7a Remote Patient Monitoring (RPM): Monitor chronic conditions fr..."
+      },
+      "passed": false,
+      "max_sentences": 5,
+      "max_bullets": 5,
+      "max_words": 250
+    }
+  ]
+}

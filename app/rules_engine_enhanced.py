@@ -501,17 +501,59 @@ class JSONRulesEngine:
             return "✅ Meets all requirements and eligible for enrollment"
     
     def _generate_next_questions_json(self, patient_responses: Dict, requirements: Dict, missing_criteria: List) -> List[str]:
-        """Generate next questions based on missing criteria from JSON rules."""
-        
+        """Generate next questions based on missing criteria from JSON rules with options."""
+
         questions = []
-        
+
         for missing in missing_criteria[:1]:  # Limit to 1 question
             req_config = requirements.get(missing, {})
-            question = req_config.get("question")
-            if question:
-                questions.append(question)
-        
+            question_text = req_config.get("question")
+
+            if question_text:
+                # Check if this question has options we should include
+                formatted_question = self._format_question_with_options(question_text, req_config, missing)
+                questions.append(formatted_question)
+
         return questions
+
+    def _format_question_with_options(self, question_text: str, req_config: Dict, req_name: str) -> str:
+        """Format question with available options for better user experience."""
+
+        # Special handling for chronic conditions
+        if "chronic" in req_name.lower() or "conditions" in req_name.lower():
+            values = req_config.get("values", [])
+            if values:
+                # Format chronic conditions nicely
+                conditions_list = [
+                    "Type 1 or Type 2 Diabetes",
+                    "High Blood Pressure (Hypertension)",
+                    "COPD (Chronic Obstructive Pulmonary Disease)",
+                    "Heart Failure or other heart conditions",
+                    "Chronic Kidney Disease",
+                    "Asthma",
+                    "Other chronic condition"
+                ]
+                return f"{question_text}\n" + "\n".join(f"• {cond}" for cond in conditions_list)
+
+        # Special handling for insurance
+        if "insurance" in req_name.lower():
+            insurance_options = [
+                "Medicare (Part A, Part B, or both)",
+                "Medicaid",
+                "Private insurance (through employer)",
+                "Private insurance (self-purchased)",
+                "Other government program",
+                "No, I don't have insurance"
+            ]
+            return f"{question_text}\n" + "\n".join(f"• {opt}" for opt in insurance_options)
+
+        # For other questions with values list
+        values = req_config.get("values", [])
+        if values and len(values) > 2:  # Only add list if there are multiple options
+            return f"{question_text}\n" + "\n".join(f"• {val}" for val in values[:7])  # Limit to 7 options
+
+        # Return question as-is if no options available
+        return question_text
     
     def get_next_assessment_questions(self, context: Dict, service_type: Optional[str] = None) -> List[str]:
         """Enhanced question generation using JSON assessment database."""

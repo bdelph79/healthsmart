@@ -1,0 +1,585 @@
+{
+  "timestamp": "20251005_101752",
+  "total_tests": 33,
+  "passed": 25,
+  "pass_rate": 0.7575757575757576,
+  "category_results": {
+    "informal_language": {
+      "passed": 15,
+      "total": 15,
+      "rate": 1.0
+    },
+    "micro_acknowledgments": {
+      "passed": 1,
+      "total": 8,
+      "rate": 0.125
+    },
+    "phrase_improvements": {
+      "passed": 9,
+      "total": 10,
+      "rate": 0.9
+    }
+  },
+  "detailed_results": [
+    {
+      "test_name": "D1: okie doke",
+      "user_message": "okie doke",
+      "bot_response": "Perfect! Let's continue...\n\nWhich of those chronic conditions do you have?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "perfect",
+          "great",
+          "wonderful"
+        ],
+        "found_patterns": [
+          "perfect"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D2: ok",
+      "user_message": "ok",
+      "bot_response": "Great, thanks!\n\nPlease tell me which chronic conditions you have from the list so I can check your eligibility for RPM.",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "great",
+          "thanks",
+          "perfect"
+        ],
+        "found_patterns": [
+          "great",
+          "thanks"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D3: sure thing",
+      "user_message": "sure thing",
+      "bot_response": "Wonderful!\n\nTo confirm your eligibility for RPM, please let me know which of the following chronic conditions you have:\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "wonderful",
+          "excellent",
+          "perfect"
+        ],
+        "found_patterns": [
+          "wonderful"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D4: yep",
+      "user_message": "yep",
+      "bot_response": "Perfect!\n\nTo check your eligibility for Remote Patient Monitoring, I need to know which chronic conditions you have. Could you please tell me if you have any of these:\n\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "perfect",
+          "great"
+        ],
+        "found_patterns": [
+          "perfect"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D5: sounds good",
+      "user_message": "sounds good",
+      "bot_response": "Excellent!\n\nTo proceed with checking your eligibility for Remote Patient Monitoring, please tell me which chronic conditions you have from the list I provided.",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "excellent",
+          "wonderful",
+          "perfect"
+        ],
+        "found_patterns": [
+          "excellent"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D6: what?",
+      "user_message": "what?",
+      "bot_response": "No problem - let me explain that more simply.\n\nI need to know which ongoing health conditions you have to see if you qualify for Remote Patient Monitoring. Do you have any of these?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "no problem",
+          "let me explain",
+          "clarify",
+          "simplify"
+        ],
+        "found_patterns": [
+          "no problem",
+          "let me explain"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D7: huh?",
+      "user_message": "huh?",
+      "bot_response": "Happy to clarify! I understand you might be finding this a bit confusing.\n\nTo find out if Remote Patient Monitoring is right for you, I just need to know if you have any of these health conditions:\n\n\u2022 Diabetes (Type 1 or Type 2)\n\u2022 High Blood Pressure\n\u2022 A lung condition like COPD or Asthma\n\u2022 A heart condition\n\u2022 Kidney disease\n\u2022 Or any other long-term health condition?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "no problem",
+          "clarify",
+          "explain"
+        ],
+        "found_patterns": [
+          "clarify"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D8: confused",
+      "user_message": "confused",
+      "bot_response": "I hear you - let me break this down step by step.\n\nI'm trying to see if you qualify for Remote Patient Monitoring. To do that, I need to know if you have any long-term health issues.\n\nFor example, do you have **Diabetes** or **High Blood Pressure**?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "i hear you",
+          "break this down",
+          "step by step",
+          "simplify"
+        ],
+        "found_patterns": [
+          "i hear you",
+          "break this down",
+          "step by step"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D9: i don't understand",
+      "user_message": "i don't understand",
+      "bot_response": "Happy to clarify! Here's what I mean...\n\nTo help you with Remote Patient Monitoring, I need to know if you have any health problems that you manage every day. Things like:\n\n*   **Diabetes** (problems with blood sugar)\n*   **High Blood Pressure** (when your heart works too hard)\n*   **Heart problems** (like heart failure)\n*   **Lung problems** (like COPD or Asthma)\n*   **Kidney problems**\n\nDo you have any of these? Or any other ongoing health issues?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "happy to clarify",
+          "let me explain",
+          "simplify"
+        ],
+        "found_patterns": [
+          "happy to clarify"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D10: that's confusing",
+      "user_message": "that's confusing",
+      "bot_response": "You're right, let me simplify that for you.\n\nImagine having a health partner checking in on you 24/7 from the comfort of home. That's Remote Patient Monitoring. To see if it's a good fit, I just need to know if you have any conditions like diabetes or high blood pressure.\n\nDo you have any ongoing health conditions that you manage regularly?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "you're right",
+          "simplify",
+          "clarify"
+        ],
+        "found_patterns": [
+          "you're right",
+          "simplify"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D11: frustrated",
+      "user_message": "this is frustrating",
+      "bot_response": "I understand - let me help simplify this.\n\nI just need to ask a quick question to see if Remote Patient Monitoring (RPM) is right for you. RPM helps you manage your health from home with connected devices.\n\nDo you have any long-term health conditions, like diabetes or high blood pressure?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "i understand",
+          "help",
+          "simplify"
+        ],
+        "found_patterns": [
+          "i understand",
+          "help",
+          "simplify"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D12: overwhelmed",
+      "user_message": "overwhelmed",
+      "bot_response": "I hear you. Let's take it step by step together.\n\nTo qualify for Remote Patient Monitoring, it's usually for people who are managing an ongoing health condition.\n\nDo you have **diabetes** or **high blood pressure**? Or another long-term health condition?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "i hear you",
+          "step by step",
+          "together"
+        ],
+        "found_patterns": [
+          "i hear you",
+          "step by step",
+          "together"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D13: worried",
+      "user_message": "worried about costs",
+      "bot_response": "That's completely understandable. I'm here to help.\n\nMany Remote Patient Monitoring programs are covered by insurance, which can help significantly with costs. We can look into that for you.\n\nFirst, to see if you qualify for RPM, could you tell me if you have any chronic health conditions, like diabetes or high blood pressure?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "understandable",
+          "i'm here",
+          "help"
+        ],
+        "found_patterns": [
+          "understandable",
+          "i'm here",
+          "help"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D14: not sure",
+      "user_message": "not sure what to do",
+      "bot_response": "No problem at all - I'm here to guide you.\n\nLet's just focus on one thing at a time. To find out if Remote Patient Monitoring is a good fit, do you have any long-term health conditions, such as:\n\n*   **Diabetes**\n*   **High Blood Pressure**\n*   **COPD or Asthma**\n*   **Heart Failure**\n*   **Chronic Kidney Disease**",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "no problem",
+          "guide you",
+          "i'm here"
+        ],
+        "found_patterns": [
+          "no problem",
+          "guide you",
+          "i'm here"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "D15: stressed",
+      "user_message": "stressed out",
+      "bot_response": "I get it - let me make this easier for you.\n\nWe just need to confirm one key piece of information to see if Remote Patient Monitoring can help you. It's a program that lets you manage your health from home.\n\nDo you have a chronic health condition, like diabetes or high blood pressure?",
+      "analysis": {
+        "recognized": true,
+        "appropriate": true,
+        "expected_patterns": [
+          "i get it",
+          "easier",
+          "help"
+        ],
+        "found_patterns": [
+          "i get it",
+          "easier",
+          "help"
+        ],
+        "is_warm": true,
+        "is_cold": false
+      },
+      "passed": true
+    },
+    {
+      "test_name": "E1: Provide age",
+      "user_message": "I'm 78 years old",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\n1. **Remote Patient Monitoring (RPM):** Monitor chronic conditions from home with connected devices.\n2. **Telehealth / Virtual Primary Care:** See a doctor virtually for prescriptions and appointments.\n3. **Insurance Enrollment:** Get help finding health insurance plans.\n4. **Pharmacy Savings Programs:** Find discounts on your prescription medications.\n5. **Wellness Programs:** Access support for weight management, diabetes prevention, and stress management.\n\nIf you're experiencing a medical emergency, please call 911 immediately.\n\nHow can I help you today? You mentioned you are 78 years old. Is there a specific service you are interested in, or would you like to tell me more about your health needs?",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E2: Provide condition",
+      "user_message": "I have diabetes",
+      "bot_response": "Welcome! I see you have diabetes. That's a key factor for our Remote Patient Monitoring (RPM) program, which lets you track your health from home.\n\nTo see if you qualify for RPM, could you tell me about your health insurance?\n\u2022 Medicare (Part A, Part B, or both)\n\u2022 Medicaid\n\u2022 Private insurance (through employer)\n\u2022 Private insurance (self-purchased)\n\u2022 Other government program\n\u2022 No, I don't have insurance",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E3: Provide insurance",
+      "user_message": "I have Medicare",
+      "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   \ud83e\ude7a Remote Patient Monitoring (RPM)\n*   \ud83d\udcbb Telehealth / Virtual Primary Care\n*   \ud83d\udee1\ufe0f Insurance Enrollment\n*   \ud83d\udc8a Pharmacy Savings Programs\n*   \ud83c\udf1f Wellness Programs\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E4: Ask good question",
+      "user_message": "Does this work for people with multiple conditions?",
+      "bot_response": "Welcome to HealthSmart Assistant!\n\nYes, many of our programs are designed to help people manage multiple health conditions effectively.\n\nI can help you with these healthcare services:\n\n*   **Remote Patient Monitoring (RPM):** Monitor chronic conditions from home.\n*   **Telehealth / Virtual Primary Care:** Virtual doctor visits and prescription management.\n*   **Insurance Enrollment:** Help finding health insurance plans.\n*   **Pharmacy Savings Programs:** Prescription medication discounts.\n*   **Wellness Programs:** Support for weight management, diabetes prevention, and stress management.\n\nHow can I help you today? Please tell me about your health needs.",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E5: User corrects",
+      "user_message": "Actually, I meant type 2 diabetes",
+      "bot_response": "I'm here to help you navigate your healthcare journey! I can assist with several services, including:\n\n*   **Remote Patient Monitoring (RPM):** This helps you manage chronic conditions like Type 2 Diabetes from home with connected devices.\n*   **Telehealth / Virtual Primary Care:** You can see a doctor from home for prescriptions and appointments.\n*   **Insurance Enrollment:** I can help you find health insurance plans.\n*   **Pharmacy Savings Programs:** I can help you find discounts on your medications.\n*   **Wellness Programs:** These programs offer support for things like weight management and stress.\n\nTo help you best, could you tell me what you're looking for assistance with today?",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E6: Share concern",
+      "user_message": "I'm concerned about the cost",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs. If you're experiencing an emergency, please call 911 immediately.\n\nYou mentioned you're concerned about the cost. Which of these services sounds most helpful for your needs?",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "E7: Multiple info",
+      "user_message": "I'm 65, have diabetes and Medicare",
+      "bot_response": "Great to have you! It sounds like you're looking for support with your health. With your diabetes and Medicare, Remote Patient Monitoring could be a great fit.\n\n I hear you mentioned you have Medicare. That's a great start!\n\nTo see if RPM is the best fit, let's look at a few more things. Do you have access to a smartphone or tablet?",
+      "analysis": {
+        "count": 2,
+        "acknowledgments": [
+          "i hear you",
+          "great"
+        ],
+        "has_acknowledgment": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "E8: Express interest",
+      "user_message": "That sounds helpful!",
+      "bot_response": "I'm glad you're here! I can help you with a few different healthcare services.\n\nHere\u2019s what I offer:\n\u2022 **Remote Patient Monitoring (RPM):** Manage chronic conditions from home with connected devices.\n\u2022 **Telehealth / Virtual Primary Care:** See a doctor virtually for prescriptions and appointments.\n\u2022 **Insurance Enrollment:** Find health insurance plans, including Medicare and marketplace options.\n\u2022 **Pharmacy Savings Programs:** Get discounts on your prescriptions, no insurance needed.\n\u2022 **Wellness Programs:** Support for weight management, diabetes prevention, and stress.\n\nIf you're having a medical emergency like chest pain or difficulty breathing, please call 911 right away.\n\nWhat can I help you with today? Tell me a bit about what you're looking for!",
+      "analysis": {
+        "count": 0,
+        "acknowledgments": [],
+        "has_acknowledgment": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "F1: Pharmacy savings ask",
+      "user_message": "Tell me about pharmacy savings",
+      "bot_response": "Let's find the easiest way for you to save on your medicine today! Our Pharmacy Savings Program offers up to 80% off prescriptions and is accepted at over 60,000 pharmacies. Everyone qualifies, and it even covers your pets!\n\nWould you like to explore how to get your free discount card?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [
+          "let's find the easiest way",
+          "save on your medicine"
+        ],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 2,
+        "quality_score": 1.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F2: Complex question",
+      "user_message": "Can you help me with my medications?",
+      "bot_response": "Perfect! I can help you with your medications through our Pharmacy Savings Programs.\n\nLet's find the easiest way for you to save on your medicine today! What questions do you have about our Pharmacy Savings Programs, or would you like to see if you qualify for savings?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [
+          "let's find the easiest way",
+          "save on your medicine"
+        ],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 2,
+        "quality_score": 1.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F3: Off-topic",
+      "user_message": "Can you recommend a restaurant?",
+      "bot_response": "I can't help with restaurants, but I can guide you on your health journey. Good question. I can help you find care, save on medicines, and connect to programs that fit your needs.\n\nHere are the services I offer:\n\n*   Remote Patient Monitoring (RPM)\n*   Telehealth / Virtual Primary Care\n*   Insurance Enrollment\n*   Pharmacy Savings Programs\n*   Wellness Programs\n\nHow can I help you with your healthcare needs today?",
+      "analysis": {
+        "bad_phrases_found": [
+          "i can't help with restaurants"
+        ],
+        "good_phrases_found": [
+          "good question",
+          "i can help you find care"
+        ],
+        "bad_phrase_count": 1,
+        "good_phrase_count": 2,
+        "quality_score": 0.6666666666666666,
+        "passes": false
+      },
+      "passed": false
+    },
+    {
+      "test_name": "F4: Age request context",
+      "user_message": "Why do you need my age?",
+      "bot_response": "I'm here to help you with a variety of healthcare services like Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs!\n\nTo help you better and see which programs you might qualify for, I sometimes need to ask a few questions, like your age. Different services have different age requirements.\n\nWhat health needs are on your mind today?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [
+          "to help you better"
+        ],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 1,
+        "quality_score": 1.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F5: Insurance concern",
+      "user_message": "I don't have insurance",
+      "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   \ud83e\ude7a Remote Patient Monitoring (RPM)\n*   \ud83d\udcbb Telehealth / Virtual Primary Care\n*   \ud83d\udee1\ufe0f Insurance Enrollment\n*   \ud83d\udc8a Pharmacy Savings Programs\n*   \ud83c\udf1f Wellness Programs\n\nHow can I help you today? Please tell me about your health needs. I understand you mentioned not having insurance, and I can definitely help you explore options for that, or any of our other services!",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F6: Service explanation",
+      "user_message": "What is RPM?",
+      "bot_response": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring tracks your health using connected devices and can help prevent hospital readmissions. Would you like to see if you qualify?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F7: Multiple needs",
+      "user_message": "I need help with everything",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nWould you like to explore:\n\u2022 Remote Patient Monitoring (RPM)\n\u2022 Telehealth / Virtual Primary Care\n\u2022 Insurance Enrollment\n\u2022 Pharmacy Savings Programs\n\u2022 Wellness Programs\n\nWhat kind of help are you looking for today?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F8: Cost question",
+      "user_message": "How much does this cost?",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nTo answer your question about cost, it depends on which service you're interested in, as coverage and pricing vary.\n\nWhich of these services sounds like it might be a good fit for you?\n\u2022 Remote Patient Monitoring (RPM)\n\u2022 Telehealth / Virtual Primary Care\n\u2022 Insurance Enrollment\n\u2022 Pharmacy Savings Programs\n\u2022 Wellness Programs",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F9: Eligibility question",
+      "user_message": "Do I qualify?",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Programs, and Wellness Programs.\n\nTo see if you qualify for any of these, please tell me a bit about your health needs or what you're looking for today.",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    },
+    {
+      "test_name": "F10: Getting started",
+      "user_message": "How do I start?",
+      "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nHere are some of the things I can assist you with:\n*   **Remote Patient Monitoring (RPM):** Manage chronic conditions from home with connected devices.\n*   **Telehealth / Virtual Primary Care:** See a doctor virtually for prescriptions and appointments.\n*   **Insurance Enrollment:** Find health insurance plans, including Medicare.\n*   **Pharmacy Savings Programs:** Get discounts on your medications.\n*   **Wellness Programs:** Support for weight management, diabetes prevention, and stress management.\n\nIf you're experiencing a medical emergency, please call 911 immediately.\n\nWhat are your health needs today?",
+      "analysis": {
+        "bad_phrases_found": [],
+        "good_phrases_found": [],
+        "bad_phrase_count": 0,
+        "good_phrase_count": 0,
+        "quality_score": 0.0,
+        "passes": true
+      },
+      "passed": true
+    }
+  ]
+}

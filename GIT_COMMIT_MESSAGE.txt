@@ -1,0 +1,67 @@
+feat: Enhancement 1 - Transparent service engagement (remove routing confusion)
+
+## Changes Made
+
+### 1. Renamed Function (Lines 281-388)
+- `route_to_specialist()` → `engage_service_focus()`
+- Added optional `eligibility_result` parameter for confidence scoring
+- Removed all "routing to specialist" language
+- Added service-specific benefits messaging (5 services)
+- Added confidence-based qualification messaging (3 levels)
+- Emphasized single assistant model with focused service help
+
+### 2. Updated Coordinator Agent Instructions (Lines 582-694)
+- Complete rewrite emphasizing single-agent model
+- Added "Your Identity" section clarifying ONE assistant
+- Removed all "hand off" and "routing" terminology
+- Added explicit DON'T list forbidding routing language
+- Updated workflow to use `engage_service_focus()`
+- Added communication guidelines (DO/DON'T sections)
+
+### 3. Updated Tool Registration (Line 686)
+- Changed from `route_to_specialist` to `engage_service_focus`
+
+## Impact
+
+- **User Experience:** Eliminates confusion about being "transferred" to specialists
+- **Clarity:** Users understand they're talking to one intelligent assistant
+- **Transparency:** Clear service benefits and qualification status
+- **Backward Compatible:** Optional parameters allow incremental rollout
+
+## Tests
+
+All tests passing:
+✅ No "routing" language in responses
+✅ No "specialist" language in responses
+✅ Reference numbers generated correctly
+✅ Service benefits displayed
+✅ Confidence-based messaging works
+✅ No linter errors
+
+## Files Modified
+
+- app/smart_health_agent.py (200 lines changed)
+
+## Files Created
+
+- app/smart_health_agent.py.backup
+- IMPLEMENTATION_PLAN_ENHANCEMENT_1.md
+- ENHANCEMENT_1_COMPLETED.md
+- ENHANCEMENT_1_DEMO.md
+- GIT_COMMIT_MESSAGE.txt
+
+## Related
+
+- Implements Enhancement 1 from prd-enhancements-20251004.md
+- Part of Phase 1 (Week 1): Messaging & Instructions
+- Next: Enhancement 2 (Context Tracking)
+
+## Breaking Changes
+
+None - backward compatible
+
+## Migration Notes
+
+Old function calls still work (eligibility_result is optional):
+- Old: `route_to_specialist(service, context)` 
+- New: `engage_service_focus(service, context, eligibility_result)`

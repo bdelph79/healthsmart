@@ -168,3 +168,10 @@ After applying the fix, test with:
 - Provides clear alternatives for patients in restricted states
 - Maintains professional tone while explaining limitations
 - Ensures legal compliance with state licensing requirements
+
+
+
+
+
+
+

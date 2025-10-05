@@ -1,0 +1,363 @@
+{
+  "timestamp": "20251005_102005",
+  "total_tests": 8,
+  "passed": 0,
+  "pass_rate": 0.0,
+  "average_focus_percentage": 0.3297770244461421,
+  "focus_percentages": [
+    0.25,
+    0.23529411764705882,
+    0.5,
+    0.42857142857142855,
+    0.36363636363636365,
+    0.375,
+    0.2,
+    0.2857142857142857
+  ],
+  "detailed_results": [
+    {
+      "test_name": "G1: Basic RPM focus",
+      "conversation": [
+        {
+          "user_message": "I need RPM",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic conditions from home\n   - Connected devices for health tracking\n   - Medicare and insurance coverage available\n\n2. \ud83d\udcbb Telehealth / Virtual Primary Care  \n   - Virtual doctor visits from home\n   - Prescription management and refills\n   - Same-day appointments available\n\n3. \ud83d\udee1\ufe0f Insurance Enrollment\n   - Help finding health insurance plans\n   - Medicare and marketplace assistance\n   - Special enrollment period support\n\n4. \ud83d\udc8a Pharmacy Savings Programs\n   - Prescription medication discounts\n   - Generic and brand name savings\n   - No insurance required\n\n5. \ud83c\udf1f Wellness Programs\n   - Weight management support\n   - Diabetes prevention programs\n   - Stress management and mental health\n\n\u26a0\ufe0f Emergency Support: If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "I'm 78 years old",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with:\n*   Remote Patient Monitoring (RPM)\n*   Telehealth / Virtual Primary Care\n*   Insurance Enrollment\n*   Pharmacy Savings Programs\n*   Wellness Programs\n\nIf you're experiencing an emergency, please call 911 immediately. How can I help you today?"
+        },
+        {
+          "user_message": "I have diabetes",
+          "bot_response": "Perfect! Thanks for sharing that you have diabetes. That's a key piece of information for seeing which programs might be a great fit for you.\n\n That's a great start, thank you! Knowing you have diabetes, I can tell you about a service called Remote Patient Monitoring (RPM). It's designed to help you manage chronic conditions like diabetes from the comfort of your home, using connected devices that track your health 24/7.\n\nWould you like to explore how RPM can support your diabetes management, or are you interested in something else today?"
+        },
+        {
+          "user_message": "Yes, I have Medicare",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, from Remote Patient Monitoring and Telehealth to Insurance Enrollment and Pharmacy Savings. I also offer Wellness Programs.\n\nHow can I help you today? Please tell me about your health needs."
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 4,
+          "telehealth": 3,
+          "insurance": 3,
+          "pharmacy": 3,
+          "wellness": 3
+        },
+        "total_mentions": 16,
+        "expected_mentions": 4,
+        "focus_percentage": 0.25,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G2: RPM with user distraction",
+      "conversation": [
+        {
+          "user_message": "I need help with remote patient monitoring",
+          "bot_response": "Perfect! Remote Patient Monitoring (RPM) can be a great way to manage your health.\n\nTo see if you qualify, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "I have diabetes",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic conditions from home\n   - Connected devices for health tracking\n   - Medicare and insurance coverage available\n\n2. \ud83d\udcbb Telehealth / Virtual Primary Care\n   - Virtual doctor visits from home\n   - Prescription management and refills\n   - Same-day appointments available\n\n3. \ud83d\udee1\ufe0f Insurance Enrollment\n   - Help finding health insurance plans\n   - Medicare and marketplace assistance\n   - Special enrollment period support\n\n4. \ud83d\udc8a Pharmacy Savings Programs\n   - Prescription medication discounts\n   - Generic and brand name savings\n   - No insurance required\n\n5. \ud83c\udf1f Wellness Programs\n   - Weight management support\n   - Diabetes prevention programs\n   - Stress management and mental health\n\n\u26a0\ufe0f Emergency Support: If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nIt's great you mentioned you have diabetes. This is an important detail!\n\nWould you like to explore Remote Patient Monitoring (RPM) to help manage your diabetes from home, or are you interested in a different service? I'm here to help."
+        },
+        {
+          "user_message": "What about telehealth?",
+          "bot_response": "Telehealth lets you see a doctor from home via video, offering convenient access to prescriptions, diagnoses, and follow-up care.\n\nTo see if you qualify for Telehealth, could you share your age and what state you reside in? Also, do you have a device with video calling capability and reliable internet access?"
+        },
+        {
+          "user_message": "ok, back to RPM",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n1. \ud83e\ude7a Remote Patient Monitoring (RPM)\n   - Monitor chronic conditions from home\n   - Connected devices for health tracking\n   - Medicare and insurance coverage available\n\n2. \ud83d\udcbb Telehealth / Virtual Primary Care  \n   - Virtual doctor visits from home\n   - Prescription management and refills\n   - Same-day appointments available\n\n3. \ud83d\udee1\ufe0f Insurance Enrollment\n   - Help finding health insurance plans\n   - Medicare and marketplace assistance\n   - Special enrollment period support\n\n4. \ud83d\udc8a Pharmacy Savings Programs\n   - Prescription medication discounts\n   - Generic and brand name savings\n   - No insurance required\n\n5. \ud83c\udf1f Wellness Programs\n   - Weight management support\n   - Diabetes prevention programs\n   - Stress management and mental health\n\n\u26a0\ufe0f Emergency Support: If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "I'm 75",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you find care, save on medicines, and connect to programs that fit your needs.\n\nI can help with:\n*   Remote Patient Monitoring (RPM)\n*   Telehealth / Virtual Primary Care\n*   Insurance Enrollment\n*   Pharmacy Savings Programs\n*   Wellness Programs\n\nHow can I help you today? Please tell me about your health needs."
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 4,
+          "telehealth": 4,
+          "insurance": 3,
+          "pharmacy": 3,
+          "wellness": 3
+        },
+        "total_mentions": 17,
+        "expected_mentions": 4,
+        "focus_percentage": 0.23529411764705882,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G3: Multiple needs prioritization",
+      "conversation": [
+        {
+          "user_message": "I need RPM and also help with prescriptions",
+          "bot_response": "Perfect! I can certainly help you explore both Remote Patient Monitoring and ways to save on your prescriptions.\n\nTo start with RPM, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "ok, let's start with RPM",
+          "bot_response": "Great! To see if RPM is a good fit, let's start with a quick question.\n\nDo you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "I'm 70",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   **Remote Patient Monitoring (RPM):** Monitor chronic conditions from home with connected devices.\n*   **Telehealth / Virtual Primary Care:** See a doctor virtually for prescriptions, diagnoses, and follow-up care.\n*   **Insurance Enrollment:** Get help finding health insurance plans, including Medicare.\n*   **Pharmacy Savings Programs:** Find discounts on your prescriptions.\n*   **Wellness Programs:** Support for weight management, diabetes prevention, and stress management.\n\nHow can I help you today? Please tell me about your health needs. I see you mentioned you are 70 years old."
+        },
+        {
+          "user_message": "I have high blood pressure",
+          "bot_response": "I can help you with a range of healthcare services! Since you mentioned having high blood pressure, Remote Patient Monitoring (RPM) might be a great fit. It helps you monitor chronic conditions from home with connected devices.\n\nWould you like to explore RPM or any other service, or tell me more about your health needs?"
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 4,
+          "telehealth": 1,
+          "insurance": 1,
+          "pharmacy": 1,
+          "wellness": 1
+        },
+        "total_mentions": 8,
+        "expected_mentions": 4,
+        "focus_percentage": 0.5,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G4: User asks what else during RPM",
+      "conversation": [
+        {
+          "user_message": "Tell me about RPM",
+          "bot_response": "Imagine having a health partner checking in on you 24/7 from the comfort of home. Remote Patient Monitoring helps manage chronic conditions using connected devices. To help you better, could you share your age with me?"
+        },
+        {
+          "user_message": "I'm interested",
+          "bot_response": "I'm here to help you with a range of healthcare services! What are your health needs today?"
+        },
+        {
+          "user_message": "What else do you offer?",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nHere's what I offer:\n*   **Remote Patient Monitoring (RPM)**: Manage chronic conditions from home with connected devices.\n*   **Telehealth / Virtual Primary Care**: See a doctor from home for prescriptions and appointments.\n*   **Insurance Enrollment**: Get help finding health insurance plans.\n*   **Pharmacy Savings Programs**: Find discounts on your prescription medications.\n*   **Wellness Programs**: Support for weight management, diabetes prevention, and stress.\n\nIf you're experiencing a medical emergency like chest pain or difficulty breathing, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "Let's finish RPM first",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a variety of healthcare services.\n\nYou mentioned wanting to finish RPM first. Remote Patient Monitoring tracks your health 24/7 from home using connected devices. Medicare covers it, and it can help cut hospital visits by 38%.\n\nTo see if you qualify for RPM, could you tell me if you have any chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "I have Medicare",
+          "bot_response": "Great! I see you have Medicare. How can I help you with your healthcare needs today?"
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 3,
+          "telehealth": 1,
+          "insurance": 1,
+          "pharmacy": 1,
+          "wellness": 1
+        },
+        "total_mentions": 7,
+        "expected_mentions": 3,
+        "focus_percentage": 0.42857142857142855,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G5: Graceful transition after completion",
+      "conversation": [
+        {
+          "user_message": "I need RPM",
+          "bot_response": "Perfect! Remote Patient Monitoring tracks your health 24/7 from home using connected devices. It helps prevent hospital readmissions.\n\nDo you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "78",
+          "bot_response": "Welcome to HealthSmart Assistant! I see you mentioned 78 - is that your age?\n\nI'm here to help you with services like Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "diabetes",
+          "bot_response": "Perfect! I see you mentioned diabetes, which is a key area I can help with.\n\nRemote Patient Monitoring tracks your health 24/7 from home using connected devices. Medicare covers it and it helps prevent hospital readmissions. Want to see if you qualify?\n Great! To see if you qualify, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "Medicare",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, from Remote Patient Monitoring and Telehealth to Insurance Enrollment and Pharmacy Savings.\n\nYou mentioned Medicare. Are you looking for information on how Medicare relates to any of these services, or something else?"
+        },
+        {
+          "user_message": "yes I consent",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services. How can I help you today? Please tell me about your health needs."
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 4,
+          "telehealth": 2,
+          "insurance": 2,
+          "pharmacy": 2,
+          "wellness": 1
+        },
+        "total_mentions": 11,
+        "expected_mentions": 4,
+        "focus_percentage": 0.36363636363636365,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G6: Topic switch redirect",
+      "conversation": [
+        {
+          "user_message": "Looking for RPM",
+          "bot_response": "Perfect! I can certainly help you with Remote Patient Monitoring (RPM).\n\nTo see if you qualify, do you have any of these chronic health conditions?\n\u2022 Type 1 or Type 2 Diabetes\n\u2022 High Blood Pressure (Hypertension)\n\u2022 COPD (Chronic Obstructive Pulmonary Disease)\n\u2022 Heart Failure or other heart conditions\n\u2022 Chronic Kidney Disease\n\u2022 Asthma\n\u2022 Other chronic condition"
+        },
+        {
+          "user_message": "Actually, tell me about insurance",
+          "bot_response": "Let's find you coverage that actually works for your life and budget. We can help you with health insurance enrollment and assistance.\n\nTo see if you qualify, I'll need a few details:\n\u2022 Are you a U.S. citizen or have eligible immigration status?\n\u2022 Do you have a Social Security Number or Tax Identification Number?\n\u2022 What state do you live in?\n\u2022 What is your current health insurance situation?\n\u2022 How many people are in your household (including yourself)?\n\u2022 What is your estimated annual household income before taxes?"
+        },
+        {
+          "user_message": "ok",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services, including Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings Programs, and Wellness Programs.\n\nIf you're experiencing an emergency like chest pain or difficulty breathing, please call 911 right away.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "Let's do RPM",
+          "bot_response": "Great to connect with you! I can definitely help with Remote Patient Monitoring. It's a fantastic way to keep an eye on your health from the comfort of your home using connected devices, and it can even cut down on hospital visits.\n\nTo see if you qualify for RPM, could you tell me a bit about your current health? For example, do you have any chronic health conditions like diabetes or high blood pressure?"
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 3,
+          "insurance": 2,
+          "telehealth": 1,
+          "pharmacy": 1,
+          "wellness": 1
+        },
+        "total_mentions": 8,
+        "expected_mentions": 3,
+        "focus_percentage": 0.375,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "insurance",
+          "telehealth",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G7: User mentions everything",
+      "conversation": [
+        {
+          "user_message": "I need help with RPM, telehealth, insurance, everything!",
+          "bot_response": "I'm here to help you navigate all your healthcare needs! I can assist with Remote Patient Monitoring (RPM), Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs.\n\nTo get started, what kind of help are you looking for today, or what health needs do you have?"
+        },
+        {
+          "user_message": "ok, let's start",
+          "bot_response": "Welcome to HealthSmart Assistant!\n\nI can help you with these healthcare services:\n\n*   \ud83e\ude7a Remote Patient Monitoring (RPM)\n*   \ud83d\udcbb Telehealth / Virtual Primary Care\n*   \ud83d\udee1\ufe0f Insurance Enrollment\n*   \ud83d\udc8a Pharmacy Savings Programs\n*   \ud83c\udf1f Wellness Programs\n\n\u26a0\ufe0f If you're experiencing chest pain, difficulty breathing, stroke symptoms, or other emergencies, please call 911 immediately.\n\nHow can I help you today? Please tell me about your health needs."
+        },
+        {
+          "user_message": "I'm 65",
+          "bot_response": "Welcome to HealthSmart Assistant! I'm here to help you navigate your healthcare journey.\n\nI can assist you with services like:\n*   **Remote Patient Monitoring (RPM)**: Manage chronic conditions from home.\n*   **Telehealth**: Virtual doctor visits.\n*   **Insurance Enrollment**: Find health insurance plans.\n*   **Pharmacy Savings**: Get prescription discounts.\n*   **Wellness Programs**: Support for preventive care.\n\nYou mentioned you are 65. That's a great start! How can I help you today? Please tell me a bit about your health needs or what you're looking for."
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 3,
+          "telehealth": 3,
+          "insurance": 3,
+          "pharmacy": 3,
+          "wellness": 3
+        },
+        "total_mentions": 15,
+        "expected_mentions": 3,
+        "focus_percentage": 0.2,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    },
+    {
+      "test_name": "G8: RPM not eligible - suggest alternative",
+      "conversation": [
+        {
+          "user_message": "I need RPM",
+          "bot_response": "I see you're interested in Remote Patient Monitoring (RPM)! That's a great way to manage chronic conditions from home.\n\nTo see if you qualify for RPM, could you tell me a bit about your health? For example, do you have any chronic conditions like diabetes or high blood pressure?"
+        },
+        {
+          "user_message": "I'm 30",
+          "bot_response": "Hello! I'm here to help you navigate your healthcare journey. I can assist with a range of services like Remote Patient Monitoring, Telehealth, Insurance Enrollment, Pharmacy Savings, and Wellness Programs.\n\nHow can I help you today? Please tell me a bit about your health needs or what you're looking for."
+        },
+        {
+          "user_message": "No chronic conditions",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you with a range of healthcare services.\n\nTo best assist you, could you please tell me more about your health needs or what you're looking for today?"
+        },
+        {
+          "user_message": "No insurance",
+          "bot_response": "Welcome to HealthSmart Assistant! I can help you find care, save on medicines, and connect to programs that fit your needs.\n\nI understand you mentioned you have no insurance. That's perfectly fine! We have services like Pharmacy Savings Programs that don't require insurance.\n\nHow can I help you today?"
+        }
+      ],
+      "focus_analysis": {
+        "expected_focus": "rpm",
+        "mention_counts": {
+          "rpm": 2,
+          "telehealth": 1,
+          "insurance": 1,
+          "pharmacy": 2,
+          "wellness": 1
+        },
+        "total_mentions": 7,
+        "expected_mentions": 2,
+        "focus_percentage": 0.2857142857142857,
+        "maintains_focus": false,
+        "other_services_mentioned": [
+          "telehealth",
+          "insurance",
+          "pharmacy",
+          "wellness"
+        ]
+      },
+      "passed": false
+    }
+  ]
+}
